@@ -10,7 +10,7 @@ Inspired by the well known « Feasibility Pump » algorithm in single objectiv
 Xavier Gandibleux, Guillaume Gasnier and Saïd Hanafi. A primal heuristic to compute an upper bound set for multi-objective 0-1 linear optimisation problems. MODeM '21: 1st Multi-Objective Decision Making Workshop, July 14-16, 2021. http://modem2021.cs.nuigalway.ie/
 
 
-- `SPA_GM.jl` code utilise pour le papier, GG 
 - `gravityMachineV3.jl`code XG
+- `SPA_GM.jl` code utilise pour le papier, GG 
 - `GM.jl`code reecrit, XG 
 - `testcones.jl`code de visu des cones XG
