@@ -12,6 +12,6 @@ Here after an example of result for the instance `biodidactic5.txt`:
 
 Xavier Gandibleux, Guillaume Gasnier and Saïd Hanafi. A primal heuristic to compute an upper bound set for multi-objective 0-1 linear optimisation problems. MODeM '21: 1st Multi-Objective Decision Making Workshop, July 14-16, 2021. [http://modem2021.cs.nuigalway.ie/](http://modem2021.cs.nuigalway.ie/)
 
-Paper: [http://modem2021.cs.nuigalway.ie/papers/MODeM_2021_paper_8.pdf](http://modem2021.cs.nuigalway.ie/papers/MODeM_2021_paper_8.pdf)
+Paper: [http://www.optimization-online.org/DB_HTML/2021/07/8508.html](http://www.optimization-online.org/DB_HTML/2021/07/8508.html)
 
 Video: [https://www.youtube.com/watch?v=PGEbKthSsDM](https://www.youtube.com/watch?v=PGEbKthSsDM)
