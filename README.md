@@ -10,8 +10,10 @@ Here after an example of result for the instance `biodidactic5.txt`:
 
 **References:**
 
-Xavier Gandibleux, Guillaume Gasnier and Saïd Hanafi. A primal heuristic to compute an upper bound set for multi-objective 0-1 linear optimisation problems. MODeM '21: 1st Multi-Objective Decision Making Workshop, July 14-16, 2021. [http://modem2021.cs.nuigalway.ie/](http://modem2021.cs.nuigalway.ie/)
+1) Xavier Gandibleux and Saïd Hanafi. On Multi Objective Primal Heuristics. *MOPGP'21: 14th International Conference on Multiple Objective Programming and Goal Programming, 20-21 December 2021, Online.* [https://mopgp.org/](https://mopgp.org/)
 
-Paper: [http://www.optimization-online.org/DB_HTML/2021/07/8508.html](http://www.optimization-online.org/DB_HTML/2021/07/8508.html)
+2) Xavier Gandibleux, Guillaume Gasnier and Saïd Hanafi. A primal heuristic to compute an upper bound set for multi-objective 0-1 linear optimisation problems. *MODeM'21: 1st Multi-Objective Decision Making Workshop, July 14-16, 2021, Online.* [http://modem2021.cs.nuigalway.ie/](http://modem2021.cs.nuigalway.ie/)
 
-Video: [https://www.youtube.com/watch?v=PGEbKthSsDM](https://www.youtube.com/watch?v=PGEbKthSsDM)
+- Paper: [http://www.optimization-online.org/DB_HTML/2021/07/8508.html](http://www.optimization-online.org/DB_HTML/2021/07/8508.html)
+
+- Video: [https://www.youtube.com/watch?v=PGEbKthSsDM](https://www.youtube.com/watch?v=PGEbKthSsDM)
