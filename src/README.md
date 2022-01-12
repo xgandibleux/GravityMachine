@@ -27,4 +27,4 @@ Packages Julia required:
 
 MIP Solver required:
 
-- GLPK (to instal it with Homebrew on macOS: [https://brew.sh](https://brew.sh) and [https://formulae.brew.sh/formula/glpk](https://formulae.brew.sh/formula/glpk) )
+- GLPK (to install it with Homebrew on macOS: [https://brew.sh](https://brew.sh) and [https://formulae.brew.sh/formula/glpk](https://formulae.brew.sh/formula/glpk) )
