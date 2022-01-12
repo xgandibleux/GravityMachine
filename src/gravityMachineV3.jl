@@ -188,6 +188,50 @@ function evaluerSolution(x, c1, c2)
 end
 
 # ==============================================================================
+# Algorithme de Kung (extrait S_N d'un ensemble statique de points S de IR^2)
+function kung(XFeas, YFeas)
+    S = []
+    for i=1:length(XFeas)
+        push!(S, (XFeas[i] , YFeas[i]) )
+    end
+    sort!(S, by = x -> x[1])
+    SN=[] ; push!(SN, S[1]) ; minYFeas = S[1][2]
+    for i=2:length(XFeas)
+        if S[i][2] < minYFeas
+            push!(SN, S[i]) ; minYFeas = S[i][2]
+        end
+    end
+    return SN
+end
+
+# ==============================================================================
+# Extraction de l'ensemble bornant primal + sa frontiere de l'ensemble des points realisables
+function ExtractionEBP(XFeas, YFeas)
+    X_EBP_frontiere = (Int64)[] ;  Y_EBP_frontiere = (Int64)[]
+    X_EBP = (Int64)[] ;  Y_EBP = (Int64)[]
+
+    if length(XFeas) > 0
+        SN = kung(XFeas, YFeas)
+
+        push!(X_EBP_frontiere, SN[1][1]) ;   
+        push!(Y_EBP_frontiere, ceil(Int64, 1.1 * maximum(YFeas)))
+
+        for i in 1:length(SN)-1
+            push!(X_EBP_frontiere, SN[i][1]);    push!(Y_EBP_frontiere, SN[i][2])
+            push!(X_EBP_frontiere, SN[i+1][1]);  push!(Y_EBP_frontiere, SN[i][2])
+            push!(X_EBP, SN[i][1]);              push!(Y_EBP, SN[i][2])
+        end
+        push!(X_EBP_frontiere, SN[end][1]);      push!(Y_EBP_frontiere, SN[end][2])
+
+        push!(X_EBP_frontiere, ceil(Int64, 1.1 * maximum(XFeas)))
+        push!(Y_EBP_frontiere, SN[end][2])
+
+        push!(X_EBP, SN[end][1]);   push!(Y_EBP, SN[end][2])
+    end
+    return X_EBP_frontiere, Y_EBP_frontiere,   X_EBP, Y_EBP
+end
+
+# ==============================================================================
 # The gravity machine (Man of Steel) -> to terraform the world
 #   e-contrainte avec z1 comme fonction a minimiser
 #   arrondi qui evite de conduire vers un point domine par le point issu de la RL
@@ -593,27 +637,41 @@ function mainXG4(fname::String, tailleSampling::Int64, terraform::Int64)
     # ==========================================================================
     @printf("\n6) Edition des resultats \n\n")
 
+    figure("Gravity Machine", figsize=(6.5,5))
+    legend(bbox_to_anchor=[1,1], loc=0, borderaxespad=0, fontsize = "x-small")
+    PyPlot.title("Cone | 1 rounding | 2-$fname")   
+    xlabel(L"z^1(x)")
+    ylabel(L"z^2(x)")
+
     # Donne les points relaches initiaux ---------------------------------------
-    scatter(XEBD,YEBD,color="blue", marker="x")
+    scatter(XEBD,YEBD,color="blue", marker="x", label = L"y \in L")
     @show XEBD
     @show YEBD
 
     # Donne les points entiers -------------------------------------------------
-    scatter(XInt,YInt,color="orange", marker="s", label="int")
+    scatter(XInt,YInt,color="orange", marker="s", label = L"y"*" rounded")
     @show XInt
     @show YInt
 
     # Donne les points apres projection Δ(x,x̃) ---------------------------------
-    scatter(XProj,YProj, color="red", marker="x")
+    scatter(XProj,YProj, color="red", marker="x", label = L"y"*" projected")
     @show XProj
     @show YProj
 
     # Donne les points admissibles ---------------------------------------------
-    scatter(XFeas,YFeas, color="green", marker="o")
+    scatter(XFeas,YFeas, color="green", marker="o", label = L"y \in F")
     @show XFeas
     @show YFeas
 
+    # Donne l'ensemble bornant primal obtenu + la frontiere correspondante -----
+    X_EBP_frontiere, Y_EBP_frontiere, X_EBP, Y_EBP = ExtractionEBP(XFeas, YFeas)
+    plot(X_EBP_frontiere, Y_EBP_frontiere, color="green", marker=".")
+    scatter(X_EBP, Y_EBP, color="green", s = 150,alpha = 0.3, label = L"y \in U")  
+    @show X_EBP
+    @show Y_EBP     
 end
+
+
 
 using PyPlot
 using LinearAlgebra, Printf
