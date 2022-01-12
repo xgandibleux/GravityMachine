@@ -28,3 +28,13 @@ Packages Julia required:
 MIP Solver required:
 
 - GLPK (to install it with Homebrew on macOS: [https://brew.sh](https://brew.sh) and [https://formulae.brew.sh/formula/glpk](https://formulae.brew.sh/formula/glpk) )
+
+***
+
+**Running GravityMachine:**
+
+- get a local copy of this repository
+- open a Julia REPL
+- set the current directory to `src`
+- type into the REPL `include("gravityMachineV3.jl")`
+
