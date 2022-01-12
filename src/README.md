@@ -1,4 +1,4 @@
-**Acknowledgment:**
+**Notice:**
 
 The source codes provided in this folder are versions under development and old prototypes. 
 
