@@ -698,5 +698,6 @@ function testidee()
 end
 
 #testidee()
-mainXG4("biosppaa02.txt", 6, 5)
+#mainXG4("biosppaa02.txt", 6, 5)
+mainXG4("../SPA/instance/biosppaa02.txt", 6, 5)
 nothing
