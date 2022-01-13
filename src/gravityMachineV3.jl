@@ -4,12 +4,13 @@ using JuMP, GLPK, PyPlot, Printf #, vOptGeneric
 #const GUROBI_ENV = Gurobi.Env()
 
 # ==============================================================================
-function loaddemandebi(fname::String)           #parseur lisant le fichier text entrant
+# Parseur lisant une instance de probleme de partitionnement d'ensembles (SPA) bi-objectif
+function loadInstance2SPA(fname::String)           
     f = open(fname)
     nbcontraintes, nbvar = parse.(Int, split(readline(f))) # nombre de contraintes , nombre de variables
-    L = zeros(Int, nbcontraintes, nbvar)   #matrice des contraintes
-    c1 = zeros(Int, nbvar)                  #vecteur des couts
-    c2 = zeros(Int, nbvar)                  #deuxième vecteur des couts
+    L = zeros(Int, nbcontraintes, nbvar)    # matrice des contraintes
+    c1 = zeros(Int, nbvar)                  # vecteur des couts
+    c2 = zeros(Int, nbvar)                  # deuxième vecteur des couts
     nb = zeros(Int, nbvar)
     for i in 1:nbvar
         flag = 1
@@ -82,7 +83,7 @@ function inSector(M, O, A, B)
 end
 
 # ==============================================================================
-# Model solution relaxation linéaire sur un objectif
+# Modele JuMP pour calculer la relaxation linéaire du 2SPA sur un objectif
 function relaxLinXG(nbvar::Int, nbcontraintes::Int, L::Array{Int,2}, c1::Array{Int,1}, c2::Array{Int,1}, vobj, delta, obj)
 
     model = Model(with_optimizer(GLPK.Optimizer))
@@ -103,7 +104,7 @@ function relaxLinXG(nbvar::Int, nbcontraintes::Int, L::Array{Int,2}, c1::Array{I
 end
 
 # ==============================================================================
-# Model solution relaxation linéaire sur un objectif
+# Modele JuMP pour calculer la relaxation linéaire du 2SPA sur un objectif avec une ϵ-contrainte
 function relaxLinXG4(nbvar::Int, nbcontraintes::Int, L::Array{Int,2}, c1::Array{Int,1}, c2::Array{Int,1}, epsilon, obj)
 
     model = Model(with_optimizer(GLPK.Optimizer))
@@ -268,7 +269,7 @@ function mainXG4(fname::String, tailleSampling::Int64, terraform::Int64)
     @assert tailleSampling>=3 "Erreur : Au moins 3 sont requis"
 
     # chargement de l'instance numerique ---------------------------------------
-    nbvar, nbcontraintes, L, c1, c2 = loaddemandebi(fname) # instance numerique de SPA
+    nbvar, nbcontraintes, L, c1, c2 = loadInstance2SPA(fname) # instance numerique de SPA
     nbobj = 2
     nbgen = tailleSampling
 
