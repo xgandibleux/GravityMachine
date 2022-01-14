@@ -7,7 +7,7 @@ const verbose = true
 const graphic = true
 
 println("-) Active les packages requis\n")
-using JuMP, GLPK, PyPlot, Printf
+using JuMP, GLPK, PyPlot, Printf, Random
 verbose ? println("  Fait \n") : nothing
 
 # ==============================================================================
@@ -51,7 +51,7 @@ XPert = (Int64)[];   YPert = (Int64)[]   # liste des points (x,y) perturbes
 
 function load2SPA(fname::String)
 
-    f = open("SPA_Databio/"*"bio"*fname)
+    f = open("../SPA/instances/"*"bio"*fname)
     nbctr, nbvar = parse.(Int, split(readline(f))) # nombre de contraintes , nombre de variables
     A = zeros(Int, nbctr, nbvar)                   # matrice des contraintes
     c1 = zeros(Int, nbvar)                         # vecteur des couts
@@ -84,7 +84,7 @@ end
 # Parseur lisant un fichier de Y_N (dans dossier archive) pour le 2-SPA traite
 
 function readYN(fname::String)
-    fname = "Archive/Y_N_"*fname
+    fname = "../SPA/Y/Y_N_"*fname
     f = open(fname)
     temps = parse.(Float64, readline(f))
     len = parse.(Int, readline(f))
@@ -1014,6 +1014,53 @@ end
 
 
 # ==============================================================================
+# Algorithme de Kung (extrait S_N d'un ensemble statique de points S de IR^2)
+
+function getNonDominatedPoints(XFeas, YFeas)
+    S = []
+    for i=1:length(XFeas)
+        push!(S, (XFeas[i] , YFeas[i]) )
+    end
+    sort!(S, by = x -> x[1])
+    SN=[] ; push!(SN, S[1]) ; minYFeas = S[1][2]
+    for i=2:length(XFeas)
+        if S[i][2] < minYFeas
+            push!(SN, S[i]) ; minYFeas = S[i][2]
+        end
+    end
+    return SN
+end
+
+
+# ==============================================================================
+# Extraction de l'ensemble bornant primal + sa frontiere de l'ensemble des points realisables
+function ExtractionEBP(XFeas, YFeas)
+    X_EBP_frontiere = (Int64)[];   Y_EBP_frontiere = (Int64)[]
+    X_EBP = (Int64)[] ;            Y_EBP = (Int64)[]
+
+    if length(XFeas) > 0
+        SN = getNonDominatedPoints(XFeas, YFeas)
+
+        push!(X_EBP_frontiere, SN[1][1]) ;   
+        push!(Y_EBP_frontiere, ceil(Int64, 1.1 * maximum(YFeas)))
+
+        for i in 1:length(SN)-1
+            push!(X_EBP_frontiere, SN[i][1]);     push!(Y_EBP_frontiere, SN[i][2])
+            push!(X_EBP_frontiere, SN[i+1][1]);   push!(Y_EBP_frontiere, SN[i][2])
+            push!(X_EBP, SN[i][1]);               push!(Y_EBP, SN[i][2])
+        end
+        push!(X_EBP_frontiere, SN[end][1]);       push!(Y_EBP_frontiere, SN[end][2])
+
+        push!(X_EBP_frontiere, ceil(Int64, 1.1 * maximum(XFeas)))
+        push!(Y_EBP_frontiere, SN[end][2])
+
+        push!(X_EBP, SN[end][1]);   push!(Y_EBP, SN[end][2])
+    end
+    return X_EBP_frontiere, Y_EBP_frontiere,   X_EBP, Y_EBP
+end
+
+
+# ==============================================================================
 # point d'entree principal
 
 function GM( fname::String,
@@ -1215,17 +1262,24 @@ function GM( fname::String,
 #    @show XFeas
 #    @show YFeas
 
+    # Donne l'ensemble bornant primal obtenu + la frontiere correspondante -----
+    X_EBP_frontiere, Y_EBP_frontiere, X_EBP, Y_EBP = ExtractionEBP(XFeas, YFeas)
+    plot(X_EBP_frontiere, Y_EBP_frontiere, color="green", markersize=3.0, marker="x")
+    scatter(X_EBP, Y_EBP, color="green", s = 150, alpha = 0.3, label = L"y \in U")  
+    @show X_EBP
+    @show Y_EBP 
+
+    # Donne les points qui ont fait l'objet d'une perturbation -----------------
      scatter(XPert,YPert, color="magenta", marker="s", label ="pertub")
 
-#    plot(XSN, YSN, color="green", marker=".")
-#    scatter(XSNR, YSNR, color="green", label = L"y \in U", s = 150, alpha = 0.3)
-
+    # Donne les points non-domines exacts de cette instance --------------------
      XN,YN = readYN(fname)
      plot(XN, YN, color="black", linewidth=0.75, marker="+", markersize=1.0, linestyle=":", label = L"y \in Y_N")
      scatter(XN, YN, color="black", marker="+")
 #    @show X_Y_N
 #    @show Y_Y_N
 
+    # Affiche le cadre avec les legendes des differents traces -----------------
     legend(bbox_to_anchor=[1,1], loc=0, borderaxespad=0, fontsize = "x-small")
     #PyPlot.title("Cone | 1 rounding | 2-$fname")
 
