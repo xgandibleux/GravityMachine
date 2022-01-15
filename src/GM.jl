@@ -1290,7 +1290,7 @@ end
 #testidee()
 #@time GM("sppaa02.txt", 6, 20, 20)
 #@time GM("sppnw03.txt", 6, 20, 20)
-@time GM("sppnw10.txt", 6, 20, 20)
-#@time GM("didactic5SPA.txt", 5, 5, 10)
+#@time GM("sppnw10.txt", 6, 20, 20)
+@time GM("didactic5.txt", 5, 5, 10)
 #@time GM("sppnw29.txt", 6, 30, 20)
 nothing
