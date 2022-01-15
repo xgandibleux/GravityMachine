@@ -54,7 +54,7 @@ XPert = (Int64)[];   YPert = (Int64)[]   # liste des points (x,y) perturbes
 # ==============================================================================
 # Initialisation structure donnees contenant tous les generateurs
 
-function allocateDatastructure(nbgen::Int64, nbvar::Int64, nbobj::Int64, )
+function allocateDatastructure(nbgen::Int64, nbvar::Int64, nbobj::Int64)
 
     verbose ? println("\n  → Allocation memoire pour ",nbgen," generateurs\n") : nothing
 
@@ -106,7 +106,7 @@ end
 # ==============================================================================
 # Elabore 2 ensembles d'indices selon que xTilde[i] vaut 0 ou 1
 
-function split01(xTilde)
+function split01(xTilde::Array{Int,1})
 
    indices0 = (Int64)[]
    indices1 = (Int64)[]
@@ -143,7 +143,8 @@ end
 # ==============================================================================
 # Projete xTilde sur le polyedre X
 
-function Δ2SPAbis(A::Array{Int,2}, xTilde::Array{Int,1}, c1, c2, k, λ1, λ2)
+function Δ2SPAbis(A::Array{Int,2}, xTilde::Array{Int,1}, 
+                  c1::Array{Int,1}, c2::Array{Int,1}, k::Int64, λ1::Vector{Float64}, λ2::Vector{Float64})
 
     nbctr = size(A,1)
     nbvar = size(A,2)
@@ -164,7 +165,7 @@ end
 # test si une solution est admissible en verifiant si sa relaxation lineaire
 # conduit a une solution entiere
 
-function estAdmissible(x)
+function estAdmissible(x::Vector{Float64})
 
     admissible = true
     i=1
@@ -181,7 +182,7 @@ end
 # ==============================================================================
 # calcule la performance z d'une solution x sur les 2 objectifs
 
-function evaluerSolution(x, c1, c2)
+function evaluerSolution(x::Vector{Float64}, c1::Array{Int,1}, c2::Array{Int,1})
 
     z1 = 0.0; z2 = 0.0
     for i in 1:length(x)
@@ -195,7 +196,7 @@ end
 # ==============================================================================
 # nettoyage des valeurs des variables d'une solution x relachee sur [0,1]
 
-function nettoyageSolution!(x)
+function nettoyageSolution!(x::Vector{Float64})
 
     nbvar=length(x)
     for i in 1:nbvar
@@ -213,7 +214,9 @@ end
 # ==============================================================================
 # Calcul des generateurs avec 2 ϵ-contraintes alternees jusqu'a leur rencontre
 
-function calculGenerateurs(A, c1, c2, tailleSampling, minf1RL, maxf2RL, maxf1RL, minf2RL)
+function calculGenerateurs(A::Array{Int,2}, c1::Array{Int,1}, c2::Array{Int,1}, 
+                           tailleSampling::Int64, 
+                           minf1RL::Float64, maxf2RL::Float64, maxf1RL::Float64, minf2RL::Float64)
 
     # acces aux var globales : xLf1, yLf1, xLf2, yLf2
 
@@ -294,7 +297,7 @@ end
 
 # ==============================================================================
 # predicat : verifie si une solution entiere est realisable
-function isFeasible(vg,k)
+function isFeasible(vg::Vector{tGenerateur}, k::Int64)
     #verbose && vg[k].sFea == true ? println("   feasible") : nothing
     return (vg[k].sFea == true)
 end
@@ -302,7 +305,7 @@ end
 
 # ==============================================================================
 # predicat : verifie si le nombre d'essai maximum a ete tente
-function isFinished(trial, maxTrial)
+function isFinished(trial::Int64, maxTrial::Int64)
 #    verbose && trial > maxTrial ? println("   maxTrial") : nothing
     return (trial > maxTrial)
 end
@@ -319,7 +322,7 @@ end
 # ==============================================================================
 # elabore pC le pointeur du cone ouvert vers L
 
-function elaborePointConeOuvertversL(vg, k, pB, pA)
+function elaborePointConeOuvertversL(vg::Vector{tGenerateur}, k::Int64, pB::tPoint, pA::tPoint)
 
     # recupere les coordonnees du point projete
     pC=tPoint(vg[k].sPrj.y[1], vg[k].sPrj.y[2])
@@ -419,7 +422,7 @@ end
 
 # ==============================================================================
 # Selectionne les points pour le cone pointe sur le generateur k (pCour) et ouvert vers Y
-function selectionPoints(vg, k)
+function selectionPoints(vg::Vector{tGenerateur}, k::Int64)
     nbgen = size(vg,1)
     if k==1
         # premier generateur (point predecesseur fictif)
@@ -446,7 +449,7 @@ end
 # ==============================================================================
 # arrondi la solution correspondant au generateur (pas d'historique donc)
 # version avec cone inferieur seulement
-function roundingSolution!(vg,k,c1,c2)
+function roundingSolution!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1})
 
     nbvar = length(vg[k].sInt.x)
     nbgen = size(vg,1)
@@ -529,7 +532,7 @@ end
 # ==============================================================================
 # arrondi la solution correspondant au generateur (pas d'historique donc)
 # version avec cone inferieur et superieur
-function roundingSolutionnew24!(vg,k,c1,c2)
+function roundingSolutionnew24!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1})
 
     nbvar = length(vg[k].sInt.x)
     nbgen = size(vg,1)
@@ -638,7 +641,7 @@ end
 # ==============================================================================
 # arrondi la solution correspondant au generateur (pas d'historique donc)
 # version avec voisinage et selection d'un voisin selon distance L1 avec generateur
-function roundingSolutionNew23!(vg,k,c1,c2)
+function roundingSolutionNew23!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1})
 
     nbvar = length(vg[k].sInt.x)
     nbgen = size(vg,1)
@@ -742,15 +745,18 @@ function roundingSolutionNew23!(vg,k,c1,c2)
 
 end
 
+
 # ==============================================================================
 # projecte la solution entiere correspondant au generateur k et test d'admissibilite
-function projectingSolution!(vg,k,A,c1,c2,λ1,λ2)
+function projectingSolution!(vg::Vector{tGenerateur}, k::Int64, 
+                             A::Array{Int,2}, c1::Array{Int,1}, c2::Array{Int,1}, 
+                             λ1::Vector{Float64}, λ2::Vector{Float64})
 
     # --------------------------------------------------------------------------
     # Projete la solution entiere sur le polytope X avec norme-L1
 
 #    fPrj, vg[k].sPrj.x = Δ2SPA(A,vg[k].sInt.x)
-    fPrj, vg[k].sPrj.x = Δ2SPAbis(A,vg[k].sInt.x, c1, c2,k,λ1,λ2)
+    fPrj, vg[k].sPrj.x = Δ2SPAbis(A,vg[k].sInt.x,c1,c2,k,λ1,λ2)
 
     # Nettoyage de la valeur de vg[k].sPrj.x et calcul du point bi-objectif
     # reconditionne les valeurs 0 et 1 et arrondi les autres valeurs
@@ -787,7 +793,8 @@ end
 
 # ==============================================================================
 # Calcule la direction d'interet du nadir vers le milieu de segment reliant deux points generateurs
-function calculerDirections(L,vg)
+function calculerDirections(L::Vector{tSolution{Float64}}, vg::Vector{tGenerateur})
+   # function calculerDirections(L, vg::Vector{tGenerateur})    
 
     nbgen = size(vg,1)
     for k in 2:nbgen
@@ -817,9 +824,11 @@ function calculerDirections(L,vg)
 
 end
 
+
 # ==============================================================================
 # Calcule la direction d'interet du nadir vers un point generateur
-function calculerDirections2(L,vg)
+function calculerDirections2(L::Vector{tSolution{Float64}}, vg::Vector{tGenerateur})
+    #function calculerDirections2(L, vg::Vector{tGenerateur})
 
     nbgen = size(vg,1)
     λ1=Vector{Float64}(undef, nbgen)
@@ -852,7 +861,7 @@ end
 
 # ==============================================================================
 # applique une perturbation sur la solution entiere faisant l'objet d'un cycle
-function perturbSolution!(vg,k,c1,c2)
+function perturbSolution!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1})
     # nombre de variables maximum a considerer
     T = 20
     # nombre effectif de variables a flipper
@@ -894,7 +903,7 @@ end
 
 # ==============================================================================
 # applique une perturbation sur la solution entiere faisant l'objet d'un cycle
-function perturbSolution30!(vg,k,c1,c2)
+function perturbSolution30!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1})
 
     # liste des candidats (valeur, indice) et tri decroissant
     nbvar = length(vg[k].sInt.x)
@@ -1105,12 +1114,12 @@ function GM( fname::String,
         end
     end
 
-
     # allocation de memoire pour les ensembles bornants ------------------------
     U = Vector{tSolution{Int64}}(undef,nbgen)
     for j = 1:nbgen
         U[j] = tSolution{Int64}(zeros(Int64,nbvar),zeros(Int64,nbobj))
     end
+    #--> TODO : stocker l'EBP dans U proprement
 
 
     # ==========================================================================
@@ -1142,6 +1151,7 @@ function GM( fname::String,
 #    @show YFeas
 
     # Donne l'ensemble bornant primal obtenu + la frontiere correspondante -----
+    #--> TODO : stocker l'EBP dans U proprement  
     X_EBP_frontiere, Y_EBP_frontiere, X_EBP, Y_EBP = ExtractEBP(XFeas, YFeas)
     plot(X_EBP_frontiere, Y_EBP_frontiere, color="green", markersize=3.0, marker="x")
     scatter(X_EBP, Y_EBP, color="green", s = 150, alpha = 0.3, label = L"y \in U")  
@@ -1161,6 +1171,8 @@ function GM( fname::String,
     # Affiche le cadre avec les legendes des differents traces -----------------
     legend(bbox_to_anchor=[1,1], loc=0, borderaxespad=0, fontsize = "x-small")
     #PyPlot.title("Cone | 1 rounding | 2-$fname")
+
+    #--> TODO : integrer la mesure de qualite de EBP
 
 end
 
