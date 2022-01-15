@@ -103,6 +103,7 @@ function ajouterXbar!(vg::Vector{tGenerateur}, k::Int64, x::Vector{Float64}, y::
 end
 
 
+
 # ==============================================================================
 # Elabore 2 ensembles d'indices selon que xTilde[i] vaut 0 ou 1
 
@@ -350,13 +351,10 @@ end
   A    Point de départ du secteur (point adjacent inferieur)
   B    Point d'arrivée du secteur (point adjacent superieur)
   sortie : Booléen indiquant si le point est dans le secteur ou non.
-
   Exemple :
-
   B=point(2.0,1.0)
   O=point(2.5,2.5)
   A=point(5.0,5.0)
-
   M=point(5.0,4.0)
   inSector(M, O, A, B)
 =#
