@@ -37,5 +37,5 @@ MIP Solver required:
 - get a local copy of this repository
 - open a Julia REPL
 - set the current directory to `src`
-- type into the REPL `include("GM.jl")`
+- type into the REPL `include("GMmain.jl")`
 
