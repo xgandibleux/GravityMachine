@@ -10,10 +10,11 @@ Currently the source codes are documented mainly in french.
 
 **Source codes:**
 
-- `GM.jl` version under development (January 2022)
-- `testcones.jl` code for displaying the cones
-- `gravityMachineV3.jl` starting point of the refactoring; obsolete
-- `SPA_GM.jl` version of July 2021 (used for talks presented in 2021); obsolete 
+- `GMmain.jl` version under development (January 2022)
+- others | `testCones.jl` code for displaying the cones
+- others | `testDirections`code for computing the directions
+- obsolete | vRefactoring2021 | `gravityMachineV4.jl` minimalist version (starting point of the refactoring)
+- obsolete | vConferences2021 | `SPA_GM.jl` very first version used for talks presented in 2021
 
 ***
 
