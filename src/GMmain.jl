@@ -10,64 +10,14 @@ println("-) Active les packages requis\n")
 using JuMP, GLPK, PyPlot, Printf, Random
 verbose ? println("  Fait \n") : nothing
 
+
+# ==============================================================================
+
+include("GMdatastructures.jl") # types, datastructures and global variables specially defined for GM
 include("GMparsers.jl")        # parsers of instances and non-dominated points
 include("GMjumpModels.jl")     # JuMP models for computing optima
 include("GMmopPrimitives.jl")  # usuals algorithms in multiobjective optimization
-
-
-# ==============================================================================
-
-# types ------------------------------------------------------------------------
-
-# type corresponding to a solution
-mutable struct tSolution{T}
-    x :: Vector{T}                # vector variables x (1..n)
-    y :: Vector{T}                # vector outcomes  y (1..p)
-end
-
-# type corresponding to a point generator
-mutable struct tGenerateur
-    sRel :: tSolution{Float64}    # initial relaxed solution
-    sInt :: tSolution{Int64}      # integer solution
-    sPrj :: tSolution{Float64}    # projected solution
-    sFea :: Bool                  # indicate if sInt is feasible or not
-end
-
-# type of a point (x,y) in the objective space
-mutable struct tPoint
-    x :: Float64
-    y :: Float64
-end
-
-# Global variables -------------------------------------------------------------
-
-# listes de points pour les affichages graphiques
-xLf1  = (Float64)[]; yLf1  = (Float64)[] # liste des points (x,y) relaches
-xLf2  = (Float64)[]; yLf2  = (Float64)[] # liste des points (x,y) relaches
-xL    = (Float64)[]; yL    = (Float64)[] # liste des points (x,y) relaches
-XInt  = (Int64)[];   YInt  = (Int64)[]   # liste des points (x,y) entiers
-XProj = (Float64)[]; YProj = (Float64)[] # liste des points (x,y) projetes
-XFeas = (Int64)[];   YFeas = (Int64)[]   # liste des points (x,y) admissibles
-XPert = (Int64)[];   YPert = (Int64)[]   # liste des points (x,y) perturbes
-
-
-# ==============================================================================
-# Initialisation structure donnees contenant tous les generateurs
-
-function allocateDatastructure(nbgen::Int64, nbvar::Int64, nbobj::Int64)
-
-    verbose ? println("\n  → Allocation memoire pour ",nbgen," generateurs\n") : nothing
-
-    vg = Vector{tGenerateur}(undef, nbgen)
-    for k = 1:nbgen
-        vg[k] = tGenerateur( tSolution{Float64}(zeros(Float64,nbvar),zeros(Float64,nbobj)),
-                              tSolution{Int64}(zeros(Int64,nbvar),zeros(Int64,nbobj)),
-                              tSolution{Float64}(zeros(Float64,nbvar),zeros(Float64,nbobj)),
-                              false
-                            )
-    end
-    return vg
-end
+include("GMperturbation.jl")   # routines dealing with the perturbation of a solution when a cycle is detected
 
 
 # ==============================================================================
@@ -856,95 +806,6 @@ function calculerDirections2(L::Vector{tSolution{Float64}}, vg::Vector{tGenerate
         #println("")
     end
     return λ1, λ2
-end
-
-
-# ==============================================================================
-# applique une perturbation sur la solution entiere faisant l'objet d'un cycle
-function perturbSolution!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1})
-    # nombre de variables maximum a considerer
-    T = 20
-    # nombre effectif de variables a flipper
-    TT = rand(T/2:3*T/2)
-
-    # liste des candidats (valeur, indice) et tri decroissant
-    nbvar = length(vg[k].sInt.x)
-    candidats=[( abs( vg[k].sPrj.x[i] - vg[k].sInt.x[i] ) , i ) for i=1:nbvar]
-    sort!(candidats, rev=true, by = x -> x[1])
-#    sort!(candidats,  by = x -> x[1])
-
-#@show vg[k].sPrj.x
-#@show vg[k].sInt.x
-#@show candidats
-#@show TT
-#@show nbvar
-
-    i = 1
-    while (i<= nbvar) && (i<=TT)
-        j=candidats[i][2]
-#        @show candidats[i][2]
-        if vg[k].sInt.x[j] == 0
-            vg[k].sInt.x[j] = 1
-            vg[k].sInt.y[1] = vg[k].sInt.y[1] + c1[j]
-            vg[k].sInt.y[2] = vg[k].sInt.y[2] + c2[j]
-        else
-            vg[k].sInt.x[j] = 0
-            vg[k].sInt.y[1] = vg[k].sInt.y[1] - c1[j]
-            vg[k].sInt.y[2] = vg[k].sInt.y[2] - c2[j]
-        end
-        i+=1
-    end
-    @printf("  %2dC : [ %8.2f , %8.2f ] \n", k, vg[k].sInt.y[1], vg[k].sInt.y[2])
-    push!(XPert,vg[k].sInt.y[1]); push!(YPert,vg[k].sInt.y[2])
-#    @show vg[k].sInt.x
-    return nothing
-end
-
-
-# ==============================================================================
-# applique une perturbation sur la solution entiere faisant l'objet d'un cycle
-function perturbSolution30!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1})
-
-    # liste des candidats (valeur, indice) et tri decroissant
-    nbvar = length(vg[k].sInt.x)
-    idxTilde0, idxTilde1 = split01(vg[k].sInt.x)
-
-#    candidats=[( abs( vg[k].sPrj.x[i] - vg[k].sInt.x[i] ) , i ) for i=1:nbvar if vg[k].sPrj.x[i]>0 && vg[k].sPrj.x[i]<1]
-    candidats=[( vg[k].sPrj.x[i] , i ) for i=1:nbvar if vg[k].sPrj.x[i]>0 && vg[k].sPrj.x[i]<1]
-#    sort!(candidats, rev=true, by = x -> x[1])
-
-
-#@show vg[k].sPrj.x
-#@show vg[k].sInt.x
-#@show candidats
-#@show nbvar
-
-seq = randperm(length(candidats)) # melange les candidats afin d'avoir une composante variee
-etat = vg[k].sInt.x[ candidats[seq[1]][2] ] # etat 0 ou 1 de la premiere variable candidate
-for i = 1:length(candidats)
-    j=candidats[seq[i]][2]
-    #@show candidats[seq[i]][2]
-    if etat == 0
-        if vg[k].sInt.x[j] == 0
-            vg[k].sInt.x[j] = 1
-            vg[k].sInt.y[1] = vg[k].sInt.y[1] + c1[j]
-            vg[k].sInt.y[2] = vg[k].sInt.y[2] + c2[j]
-        end
-    else
-        if vg[k].sInt.x[j] == 1
-            vg[k].sInt.x[j] = 0
-            vg[k].sInt.y[1] = vg[k].sInt.y[1] - c1[j]
-            vg[k].sInt.y[2] = vg[k].sInt.y[2] - c2[j]
-        end
-    end
-    etat=(etat+1)%2
-end
-
-    @printf("  %2dC : [ %8.2f , %8.2f ] \n", k, vg[k].sInt.y[1], vg[k].sInt.y[2])
-    push!(XPert,vg[k].sInt.y[1]); push!(YPert,vg[k].sInt.y[2])
-#    @show vg[k].sInt.x
-
-    return nothing
 end
 
 
