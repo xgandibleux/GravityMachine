@@ -166,9 +166,8 @@ end
 
 function calculGenerateurs(A::Array{Int,2}, c1::Array{Int,1}, c2::Array{Int,1}, 
                            tailleSampling::Int64, 
-                           minf1RL::Float64, maxf2RL::Float64, maxf1RL::Float64, minf2RL::Float64)
-
-    # acces aux var globales : xLf1, yLf1, xLf2, yLf2
+                           minf1RL::Float64, maxf2RL::Float64, maxf1RL::Float64, minf2RL::Float64,
+                           d::tListDisplay)
 
     nbctr = size(A,1)
     nbvar = size(A,2)
@@ -210,8 +209,8 @@ function calculGenerateurs(A::Array{Int,2}, c1::Array{Int,1}, c2::Array{Int,1},
             maxf2RLlimite = z2f1RLcourant
             if maxf2RLlimite > minf2RLlimite
                 push!(L1, (tSolution{Float64})(xf1RL,[z1f1RLcourant, z2f1RLcourant]))
-                push!(xL,z1f1RLcourant);push!(yL,z2f1RLcourant)
-                push!(xLf1,z1f1RLcourant);push!(yLf1,z2f1RLcourant)
+                push!(d.xL,z1f1RLcourant);push!(d.yL,z2f1RLcourant)
+                push!(d.xLf1,z1f1RLcourant);push!(d.yLf1,z2f1RLcourant)
             end
             j1 = j1+1
 
@@ -235,8 +234,8 @@ function calculGenerateurs(A::Array{Int,2}, c1::Array{Int,1}, c2::Array{Int,1},
             minf2RLlimite = z2f2RLcourant
             if maxf2RLlimite > minf2RLlimite
                 push!(L2, (tSolution{Float64})(xf2RL,[z1f2RLcourant, z2f2RLcourant]))
-                push!(xL,z1f2RLcourant);push!(yL,z2f2RLcourant)
-                push!(xLf2,z1f2RLcourant);push!(yLf2,z2f2RLcourant)
+                push!(d.xL,z1f2RLcourant);push!(d.yL,z2f2RLcourant)
+                push!(d.xLf2,z1f2RLcourant);push!(d.yLf2,z2f2RLcourant)
             end
             j2 = j2+1
         end
@@ -399,7 +398,7 @@ end
 # ==============================================================================
 # arrondi la solution correspondant au generateur (pas d'historique donc)
 # version avec cone inferieur seulement
-function roundingSolution!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1})
+function roundingSolution!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1}, d::tListDisplay)
 
     nbvar = length(vg[k].sInt.x)
     nbgen = size(vg,1)
@@ -473,8 +472,8 @@ function roundingSolution!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, 
 
     if length(vg[k].sInt.x) ≤ 20 @show vg[k].sInt.x end
     @printf("→ #round : %4d → [ %5d , %5d ] ", nbVarNonEntiere, vg[k].sInt.y[1], vg[k].sInt.y[2])
-    push!(XInt,vg[k].sInt.y[1])
-    push!(YInt,vg[k].sInt.y[2])
+    push!(d.XInt,vg[k].sInt.y[1])
+    push!(d.YInt,vg[k].sInt.y[2])
 
 end
 
@@ -482,7 +481,7 @@ end
 # ==============================================================================
 # arrondi la solution correspondant au generateur (pas d'historique donc)
 # version avec cone inferieur et superieur
-function roundingSolutionnew24!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1})
+function roundingSolutionnew24!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1}, d::tListDisplay)
 
     nbvar = length(vg[k].sInt.x)
     nbgen = size(vg,1)
@@ -582,8 +581,8 @@ function roundingSolutionnew24!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int
 
     if length(vg[k].sInt.x) ≤ 20 @show vg[k].sInt.x end
     @printf("→ #round : %4d → [ %5d , %5d ] ", nbVarNonEntiere, vg[k].sInt.y[1], vg[k].sInt.y[2])
-    push!(XInt,vg[k].sInt.y[1])
-    push!(YInt,vg[k].sInt.y[2])
+    push!(d.XInt,vg[k].sInt.y[1])
+    push!(d.YInt,vg[k].sInt.y[2])
 
 end
 
@@ -591,7 +590,7 @@ end
 # ==============================================================================
 # arrondi la solution correspondant au generateur (pas d'historique donc)
 # version avec voisinage et selection d'un voisin selon distance L1 avec generateur
-function roundingSolutionNew23!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1})
+function roundingSolutionNew23!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1}, d::tListDisplay)
 
     nbvar = length(vg[k].sInt.x)
     nbgen = size(vg,1)
@@ -690,8 +689,8 @@ function roundingSolutionNew23!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int
 
 #    if length(vg[k].sInt.x) ≤ 20 @show vg[k].sInt.x end
     @printf("→ #round : %4d → [ %5d , %5d ] ", nbVarNonEntiere, vg[k].sInt.y[1], vg[k].sInt.y[2])
-    push!(XInt,vg[k].sInt.y[1])
-    push!(YInt,vg[k].sInt.y[2])
+    push!(d.XInt,vg[k].sInt.y[1])
+    push!(d.YInt,vg[k].sInt.y[2])
 
 end
 
@@ -700,7 +699,8 @@ end
 # projecte la solution entiere correspondant au generateur k et test d'admissibilite
 function projectingSolution!(vg::Vector{tGenerateur}, k::Int64, 
                              A::Array{Int,2}, c1::Array{Int,1}, c2::Array{Int,1}, 
-                             λ1::Vector{Float64}, λ2::Vector{Float64})
+                             λ1::Vector{Float64}, λ2::Vector{Float64},
+                             d::tListDisplay)
 
     # --------------------------------------------------------------------------
     # Projete la solution entiere sur le polytope X avec norme-L1
@@ -717,8 +717,8 @@ function projectingSolution!(vg::Vector{tGenerateur}, k::Int64,
     vg[k].sPrj.y[1], vg[k].sPrj.y[2] = evaluerSolution(vg[k].sPrj.x, c1, c2)
     verbose ? @printf("  %2dP : [ %8.2f , %8.2f ] ",k, vg[k].sPrj.y[1], vg[k].sPrj.y[2]) : nothing
 
-    push!(XProj, vg[k].sPrj.y[1])
-    push!(YProj, vg[k].sPrj.y[2])
+    push!(d.XProj, vg[k].sPrj.y[1])
+    push!(d.YProj, vg[k].sPrj.y[2])
 
     # ----------------------------------------------------------------
     # Teste si la projection est admissible
@@ -728,8 +728,8 @@ function projectingSolution!(vg::Vector{tGenerateur}, k::Int64,
         vg[k].sInt.y[1] = vg[k].sPrj.y[1]
         vg[k].sInt.y[2] = vg[k].sPrj.y[2]
         vg[k].sFea = true
-        push!(XFeas, vg[k].sPrj.y[1])
-        push!(YFeas, vg[k].sPrj.y[2])
+        push!(d.XFeas, vg[k].sPrj.y[1])
+        push!(d.YFeas, vg[k].sPrj.y[2])
         @printf("→ Admissible "); print("                       ")
     else
         vg[k].sFea = false
@@ -818,8 +818,7 @@ function GM( fname::String,
              maxTime::Int64
            )
 
-    @assert tailleSampling>=3 "Erreur : Au moins 3 sont requis"
-
+    @assert tailleSampling>=3 "Erreur : Au moins 3 sont requis"  
 
     @printf("0) instance et parametres \n\n")
     verbose ? println("  instance = $fname | tailleSampling = $tailleSampling | maxTrial = $maxTrial | maxTime = $maxTime\n\n") : nothing
@@ -830,6 +829,8 @@ function GM( fname::String,
     nbvar = size(A,2)
     nbobj = 2
 
+    # structure pour les points qui apparaitront dans l'affichage graphique
+    d = tListDisplay([],[], [],[], [],[], [],[], [],[], [],[], [],[])
 
     # --------------------------------------------------------------------------
     # --------------------------------------------------------------------------
@@ -851,7 +852,7 @@ function GM( fname::String,
     # --------------------------------------------------------------------------
     @printf("2) calcule les generateurs par e-contrainte alternant minimiser z1 et z2\n\n")
 
-    nbgen, L = calculGenerateurs(A, c1, c2, tailleSampling, minf1RL, maxf2RL, maxf1RL, minf2RL)
+    nbgen, L = calculGenerateurs(A, c1, c2, tailleSampling, minf1RL, maxf2RL, maxf1RL, minf2RL, d)
 
     # --------------------------------------------------------------------------
     # --------------------------------------------------------------------------
@@ -874,8 +875,8 @@ function GM( fname::String,
         if estAdmissible(vg[k].sRel.x)
             ajouterXtilde!(vg, k, convert.(Int, vg[k].sRel.x), convert.(Int, L[k].y))
             vg[k].sFea   = true
-            push!(XFeas,vg[k].sInt.y[1])
-            push!(YFeas,vg[k].sInt.y[2])
+            push!(d.XFeas,vg[k].sInt.y[1])
+            push!(d.YFeas,vg[k].sInt.y[2])
             verbose ? @printf("→ Admissible \n") : nothing
         else
             vg[k].sFea   = false
@@ -910,12 +911,12 @@ function GM( fname::String,
         trial = 0
         H =(Vector{Int64})[]
 
-#perturbSolution30!(vg,k,c1,c2)
+#perturbSolution30!(vg,k,c1,c2,d)
 
         # rounding solution : met a jour sInt dans vg --------------------------
-        #roundingSolution!(vg,k,c1,c2)  # un cone
-        #roundingSolutionnew24!(vg,k,c1,c2) # deux cones
-        roundingSolutionNew23!(vg,k,c1,c2) # un cone et LS sur generateur
+        #roundingSolution!(vg,k,c1,c2,d)  # un cone
+        #roundingSolutionnew24!(vg,k,c1,c2,d) # deux cones
+        roundingSolutionNew23!(vg,k,c1,c2,d) # un cone et LS sur generateur
 
         push!(H,[vg[k].sInt.y[1],vg[k].sInt.y[2]])
         println("   t=",trial,"  |  Tps=", round(time()- temps, digits=4))
@@ -925,15 +926,15 @@ function GM( fname::String,
             trial+=1
 
             # projecting solution : met a jour sPrj, sInt, sFea dans vg --------
-            projectingSolution!(vg,k,A,c1,c2,λ1,λ2)
+            projectingSolution!(vg,k,A,c1,c2,λ1,λ2,d)
             println("   t=",trial,"  |  Tps=", round(time()- temps, digits=4))
 
             if !isFeasible(vg,k)
 
                 # rounding solution : met a jour sInt dans vg --------------------------
-                #roundingSolution!(vg,k,c1,c2)
-                #roundingSolutionnew24!(vg,k,c1,c2)
-                roundingSolutionNew23!(vg,k,c1,c2)
+                #roundingSolution!(vg,k,c1,c2,d)
+                #roundingSolutionnew24!(vg,k,c1,c2,d)
+                roundingSolutionNew23!(vg,k,c1,c2,d)
                 println("   t=",trial,"  |  Tps=", round(time()- temps, digits=4))
 
                 # test detection cycle sur solutions entieres ------------------
@@ -941,7 +942,7 @@ function GM( fname::String,
                 if (cycle == true)
                     println("CYCLE!!!!!!!!!!!!!!!")
                     # perturb solution
-                    perturbSolution30!(vg,k,c1,c2)
+                    perturbSolution30!(vg,k,c1,c2,d)
                 end
                 push!(H,[vg[k].sInt.y[1],vg[k].sInt.y[2]])
 
@@ -992,35 +993,35 @@ function GM( fname::String,
 #    xlabel(L"z^1(x)")
 #    ylabel(L"z^2(x)")
     # Donne les points relaches initiaux ---------------------------------------
-#    scatter(xLf1,yLf1,color="blue", marker="x")
-#    scatter(xLf2,yLf2,color="red", marker="+")
-    graphic ? scatter(xL,yL,color="blue", marker="x", label = L"y \in L") : nothing
+#    scatter(d.xLf1,d.yLf1,color="blue", marker="x")
+#    scatter(d.xLf2,d.yLf2,color="red", marker="+")
+    graphic ? scatter(d.xL,d.yL,color="blue", marker="x", label = L"y \in L") : nothing
 
     # Donne les points entiers -------------------------------------------------
-    graphic ? scatter(XInt,YInt,color="orange", marker="s", label = L"y"*" rounded") : nothing
-#    @show XInt
-#    @show YInt
+    graphic ? scatter(d.XInt,d.YInt,color="orange", marker="s", label = L"y"*" rounded") : nothing
+#    @show d.XInt
+#    @show d.YInt
 
     # Donne les points apres projection Δ(x,x̃) ---------------------------------
-    graphic ? scatter(XProj,YProj, color="red", marker="x", label = L"y"*" projected") : nothing
-#    @show XProj
-#    @show YProj
+    graphic ? scatter(d.XProj,d.YProj, color="red", marker="x", label = L"y"*" projected") : nothing
+#    @show d.XProj
+#    @show d.YProj
 
     # Donne les points admissibles ---------------------------------------------
-    graphic ? scatter(XFeas,YFeas, color="green", marker="o", label = L"y \in F") : nothing
-#    @show XFeas
-#    @show YFeas
+    graphic ? scatter(d.XFeas,d.YFeas, color="green", marker="o", label = L"y \in F") : nothing
+#    @show d.XFeas
+#    @show d.YFeas
 
     # Donne l'ensemble bornant primal obtenu + la frontiere correspondante -----
     #--> TODO : stocker l'EBP dans U proprement  
-    X_EBP_frontiere, Y_EBP_frontiere, X_EBP, Y_EBP = ExtractEBP(XFeas, YFeas)
+    X_EBP_frontiere, Y_EBP_frontiere, X_EBP, Y_EBP = ExtractEBP(d.XFeas, d.YFeas)
     plot(X_EBP_frontiere, Y_EBP_frontiere, color="green", markersize=3.0, marker="x")
     scatter(X_EBP, Y_EBP, color="green", s = 150, alpha = 0.3, label = L"y \in U")  
     @show X_EBP
     @show Y_EBP 
 
     # Donne les points qui ont fait l'objet d'une perturbation -----------------
-     scatter(XPert,YPert, color="magenta", marker="s", label ="pertub")
+     scatter(d.XPert,d.YPert, color="magenta", marker="s", label ="pertub")
 
     # Donne les points non-domines exacts de cette instance --------------------
      XN,YN = loadNDPoints2SPA(fname)
@@ -1041,7 +1042,7 @@ end
 
 #testidee()
 #@time GM("sppaa02.txt", 6, 20, 20)
-#@time GM("sppnw03.txt", 6, 20, 20)
+#@time GM("sppnw03.txt", 6, 20, 20) #pb glpk
 #@time GM("sppnw10.txt", 6, 20, 20)
 @time GM("didactic5.txt", 5, 5, 10)
 #@time GM("sppnw29.txt", 6, 30, 20)

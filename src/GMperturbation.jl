@@ -1,7 +1,7 @@
 # ==============================================================================
 # applique une perturbation sur la solution entiere faisant l'objet d'un cycle
 
-function perturbSolution!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1})
+function perturbSolution!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1}, d::tListDisplay)
     # nombre de variables maximum a considerer
     T = 20
     # nombre effectif de variables a flipper
@@ -35,7 +35,7 @@ function perturbSolution!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c
         i+=1
     end
     @printf("  %2dC : [ %8.2f , %8.2f ] \n", k, vg[k].sInt.y[1], vg[k].sInt.y[2])
-    push!(XPert,vg[k].sInt.y[1]); push!(YPert,vg[k].sInt.y[2])
+    push!(d.XPert,vg[k].sInt.y[1]); push!(d.YPert,vg[k].sInt.y[2])
 #    @show vg[k].sInt.x
     return nothing
 end
@@ -44,7 +44,7 @@ end
 # ==============================================================================
 # applique une perturbation sur la solution entiere faisant l'objet d'un cycle
 
-function perturbSolution30!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1})
+function perturbSolution30!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1}, d::tListDisplay)
 
     # liste des candidats (valeur, indice) et tri decroissant
     nbvar = length(vg[k].sInt.x)
@@ -82,7 +82,7 @@ for i = 1:length(candidats)
 end
 
     @printf("  %2dC : [ %8.2f , %8.2f ] \n", k, vg[k].sInt.y[1], vg[k].sInt.y[2])
-    push!(XPert,vg[k].sInt.y[1]); push!(YPert,vg[k].sInt.y[2])
+    push!(d.XPert,vg[k].sInt.y[1]); push!(d.YPert,vg[k].sInt.y[2])
 #    @show vg[k].sInt.x
 
     return nothing

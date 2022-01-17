@@ -20,16 +20,17 @@ mutable struct tPoint
     y :: Float64
 end
 
-# Global variables -------------------------------------------------------------
 
-# listes de points pour les affichages graphiques
-xLf1  = (Float64)[]; yLf1  = (Float64)[] # liste des points (x,y) relaches
-xLf2  = (Float64)[]; yLf2  = (Float64)[] # liste des points (x,y) relaches
-xL    = (Float64)[]; yL    = (Float64)[] # liste des points (x,y) relaches
-XInt  = (Int64)[];   YInt  = (Int64)[]   # liste des points (x,y) entiers
-XProj = (Float64)[]; YProj = (Float64)[] # liste des points (x,y) projetes
-XFeas = (Int64)[];   YFeas = (Int64)[]   # liste des points (x,y) admissibles
-XPert = (Int64)[];   YPert = (Int64)[]   # liste des points (x,y) perturbes
+# type grouping the lists of points for dysplaying purposes
+mutable struct tListDisplay
+    xLf1  :: Vector{Float64};  yLf1  :: Vector{Float64} # liste des points (x,y) relaches
+    xLf2  :: Vector{Float64};  yLf2  :: Vector{Float64} # liste des points (x,y) relaches
+    xL    :: Vector{Float64};  yL    :: Vector{Float64} # liste des points (x,y) relaches
+    XInt  :: Vector{Int64};    YInt  :: Vector{Int64}   # liste des points (x,y) entiers
+    XProj :: Vector{Float64};  YProj :: Vector{Float64} # liste des points (x,y) projetes
+    XFeas :: Vector{Int64};    YFeas :: Vector{Int64}   # liste des points (x,y) admissibles
+    XPert :: Vector{Int64};    YPert :: Vector{Int64}   # liste des points (x,y) perturbes
+end
 
 
 # ==============================================================================
