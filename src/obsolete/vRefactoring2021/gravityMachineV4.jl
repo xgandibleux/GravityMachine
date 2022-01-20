@@ -1,39 +1,12 @@
 using JuMP, GLPK, PyPlot, Printf #, vOptGeneric
-# https://github.com/fuofuo-gg/TER
+
+# URL repo Guillaume : https://github.com/fuofuo-gg/TER
 
 #const GUROBI_ENV = Gurobi.Env()
 
-# ==============================================================================
-# Parseur lisant une instance de probleme de partitionnement d'ensembles (SPA) bi-objectif
-function loadInstance2SPA(fname::String)           
-    f = open(fname)
-    nbcontraintes, nbvar = parse.(Int, split(readline(f))) # nombre de contraintes , nombre de variables
-    L = zeros(Int, nbcontraintes, nbvar)    # matrice des contraintes
-    c1 = zeros(Int, nbvar)                  # vecteur des couts
-    c2 = zeros(Int, nbvar)                  # deuxième vecteur des couts
-    nb = zeros(Int, nbvar)
-    for i in 1:nbvar
-        flag = 1
-        for valeur in split(readline(f))
-            if flag == 1
-                c1[i] = parse(Int, valeur)
-                flag +=1
-            elseif flag == 2
-                c2[i] = parse(Int, valeur)
-                flag +=1
-            elseif flag == 3
-                nb[i] = parse(Int, valeur)
-                flag +=1
-            else
-                j = parse(Int, valeur)
-                L[j,i] = 1
-            end
-        end
-    end
-    close(f)
-    return nbvar, nbcontraintes, L, c1, c2
-end
-
+include("GMparsers.jl")
+include("GMjumpModels.jl")
+include("GMndpoints.jl")
 
 # ==============================================================================
 #= Retourne un booléen indiquant si un point se trouve dans un secteur défini dans
@@ -82,47 +55,6 @@ function inSector(M, O, A, B)
     end
 end
 
-# ==============================================================================
-# Modele JuMP pour calculer la relaxation linéaire du 2SPA sur un objectif
-function relaxLinXG(nbvar::Int, nbcontraintes::Int, L::Array{Int,2}, c1::Array{Int,1}, c2::Array{Int,1}, vobj, delta, obj)
-
-    model = Model(with_optimizer(GLPK.Optimizer))
-#    model = Model(with_optimizer(Gurobi.Optimizer, GUROBI_ENV))
-#    set_optimizer_attributes(model, "OutputFlag" => 0)
-
-    @variable(model, 0.0 <= x[1:nbvar] <= 1.0 )
-    @constraint(model, [i=1:nbcontraintes],(sum((x[j]*L[i,j]) for j in 1:nbvar)) == 1)
-    if obj == 1
-        @objective(model, Min, sum((c1[i])*x[i] for i in 1:nbvar))
-        @constraint(model, sum((c2[i])*x[i] for i in 1:nbvar) <= vobj-delta)
-    else
-        @objective(model, Min, sum((c2[i])*x[i] for i in 1:nbvar))
-        @constraint(model, sum((c1[i])*x[i] for i in 1:nbvar) <= vobj-delta)
-    end
-    optimize!(model)
-    return objective_value(model), value.(x)
-end
-
-# ==============================================================================
-# Modele JuMP pour calculer la relaxation linéaire du 2SPA sur un objectif avec une ϵ-contrainte
-function relaxLinXG4(nbvar::Int, nbcontraintes::Int, L::Array{Int,2}, c1::Array{Int,1}, c2::Array{Int,1}, epsilon, obj)
-
-    model = Model(with_optimizer(GLPK.Optimizer))
-#    model = Model(with_optimizer(Gurobi.Optimizer, GUROBI_ENV))
-#    set_optimizer_attributes(model, "OutputFlag" => 0)
-
-    @variable(model, 0.0 <= x[1:nbvar] <= 1.0 )
-    @constraint(model, [i=1:nbcontraintes],(sum((x[j]*L[i,j]) for j in 1:nbvar)) == 1)
-    if obj == 1
-        @objective(model, Min, sum((c1[i])*x[i] for i in 1:nbvar))
-        @constraint(model, sum((c2[i])*x[i] for i in 1:nbvar) <= epsilon)
-    else
-        @objective(model, Min, sum((c2[i])*x[i] for i in 1:nbvar))
-        @constraint(model, sum((c1[i])*x[i] for i in 1:nbvar) <= epsilon)
-    end
-    optimize!(model)
-    return objective_value(model), value.(x)
-end
 
 # ==============================================================================
 # Elabore 2 ensembles d'indices selon que xTilde[i] vaut 0 ou 1
@@ -143,6 +75,7 @@ function splitXG(xTilde)
 end
 
 #xTilde = [0,0,1,1,1,0,1]
+
 
 # ==============================================================================
 # Projete xTilde sur le polyedre X
@@ -177,6 +110,7 @@ function estAdmissible(x)
     return admissible
 end
 
+
 # ==============================================================================
 # calcule la performance d'une solution sur les 2 objectifs
 function evaluerSolution(x, c1, c2)
@@ -188,22 +122,6 @@ function evaluerSolution(x, c1, c2)
     return round(z1, digits=2), round(z2, digits=2)
 end
 
-# ==============================================================================
-# Algorithme de Kung (extrait S_N d'un ensemble statique de points S de IR^2)
-function kung(XFeas, YFeas)
-    S = []
-    for i=1:length(XFeas)
-        push!(S, (XFeas[i] , YFeas[i]) )
-    end
-    sort!(S, by = x -> x[1])
-    SN=[] ; push!(SN, S[1]) ; minYFeas = S[1][2]
-    for i=2:length(XFeas)
-        if S[i][2] < minYFeas
-            push!(SN, S[i]) ; minYFeas = S[i][2]
-        end
-    end
-    return SN
-end
 
 # ==============================================================================
 # Extraction de l'ensemble bornant primal + sa frontiere de l'ensemble des points realisables
@@ -212,7 +130,7 @@ function ExtractionEBP(XFeas, YFeas)
     X_EBP = (Int64)[] ;  Y_EBP = (Int64)[]
 
     if length(XFeas) > 0
-        SN = kung(XFeas, YFeas)
+        SN = getNonDominatedPoints(XFeas, YFeas)
 
         push!(X_EBP_frontiere, SN[1][1]) ;   
         push!(Y_EBP_frontiere, ceil(Int64, 1.1 * maximum(YFeas)))
@@ -231,6 +149,7 @@ function ExtractionEBP(XFeas, YFeas)
     end
     return X_EBP_frontiere, Y_EBP_frontiere,   X_EBP, Y_EBP
 end
+
 
 # ==============================================================================
 # The gravity machine (Man of Steel) -> to terraform the world
@@ -262,8 +181,7 @@ mutable struct tPoint
 end
 
 
-
-function mainXG4(fname::String, tailleSampling::Int64, terraform::Int64)
+function mainGM(fname::String, tailleSampling::Int64, terraform::Int64)
 
     @printf("Running the gravity machine...\n\n")
     @assert tailleSampling>=3 "Erreur : Au moins 3 sont requis"
@@ -310,11 +228,11 @@ function mainXG4(fname::String, tailleSampling::Int64, terraform::Int64)
     @printf("1) calcule les etendues de valeurs sur les 2 objectifs\n\n")
 
     # calcule la valeur optimale relachee de f1 seule et le point (z1,z2) correspondant
-    f1RL, xf1RL = relaxLinXG(nbvar, nbcontraintes, L, c1, c2, typemax(Int), 0, 1) # opt fct 1
+    f1RL, xf1RL = computeLinearRelax2SPA(nbvar, nbcontraintes, L, c1, c2, typemax(Int), 1) # opt fct 1
     z1RL1, z2RL1 = evaluerSolution(xf1RL, c1, c2)
 
     # calcule la valeur optimale relachee de f2 seule et le point (z1,z2) correspondant
-    f2RL, xf2RL = relaxLinXG(nbvar, nbcontraintes, L, c1, c2, typemax(Int), 0, 2) # opt fct 2
+    f2RL, xf2RL = computeLinearRelax2SPA(nbvar, nbcontraintes, L, c1, c2, typemax(Int), 2) # opt fct 2
     z1RL2, z2RL2 = evaluerSolution(xf2RL, c1, c2)
 
     @printf("  f1_min=%8.2f ↔ f1_max=%8.2f (Δ=%.2f) \n",z1RL1, z1RL2, z1RL2-z1RL1)
@@ -331,7 +249,7 @@ function mainXG4(fname::String, tailleSampling::Int64, terraform::Int64)
         @printf("  %2d : ϵ = %8.2f  ", j, z2RL1 - (j-1) * pasSample) # echantillonage sur z2
 
         # calcul d'une solution epsilon-contrainte -----------------------------
-        fRL, ebtmp1[j].xEBD = relaxLinXG4(nbvar, nbcontraintes, L, c1, c2, z2RL1 - (j-1) * pasSample, 1)
+        fRL, ebtmp1[j].xEBD = computeLinearRelax2SPA(nbvar, nbcontraintes, L, c1, c2, z2RL1 - (j-1) * pasSample, 1)
         @printf("fRL = %8.2f  ",round(fRL, digits=2))
 
         # nettoyage de la valeur de ebtmp1[j].xEBD et calcul du point bi-objectif --
@@ -356,7 +274,7 @@ function mainXG4(fname::String, tailleSampling::Int64, terraform::Int64)
         @printf("  %2d : ϵ = %8.2f  ", tailleSampling-j, z1RL2 - (j-1) * pasSample)  # echantillonage sur z1
 
         # calcul d'une solution epsilon-contrainte -----------------------------
-        fRL, ebtmp2[tailleSampling-j].xEBD = relaxLinXG4(nbvar, nbcontraintes, L, c1, c2, z1RL2 - (j-1) * pasSample, 2)
+        fRL, ebtmp2[tailleSampling-j].xEBD = computeLinearRelax2SPA(nbvar, nbcontraintes, L, c1, c2, z1RL2 - (j-1) * pasSample, 2)
         @printf("fRL = %8.2f  ",round(fRL, digits=2))
 
         # nettoyage de la valeur de ebtmp2[j].xEBD et calcul du point bi-objectif --
@@ -633,13 +551,11 @@ function mainXG4(fname::String, tailleSampling::Int64, terraform::Int64)
     end # for pump
 
 
-
-
     # ==========================================================================
     @printf("\n6) Edition des resultats \n\n")
 
+    # Initialisation de l'environnement du graphique ---------------------------
     figure("Gravity Machine", figsize=(6.5,5))
-    legend(bbox_to_anchor=[1,1], loc=0, borderaxespad=0, fontsize = "x-small")
     PyPlot.title("Cone | 1 rounding | 2-$fname")   
     xlabel(L"z^1(x)")
     ylabel(L"z^2(x)")
@@ -670,93 +586,12 @@ function mainXG4(fname::String, tailleSampling::Int64, terraform::Int64)
     scatter(X_EBP, Y_EBP, color="green", s = 150,alpha = 0.3, label = L"y \in U")  
     @show X_EBP
     @show Y_EBP     
+
+    # Affichage des legendes correspondantes aux differents traces -------------
+    legend(bbox_to_anchor=[1,1], loc=0, borderaxespad=0, fontsize = "x-small")
 end
 
 
-
-using PyPlot
-using LinearAlgebra, Printf
-function testidee()
-    c1 = rand(0:100,20)
-    c2 = rand(0:100,20)
-    x  = rand(0.0:1.0,20)
-    for i=1:5
-        x[rand(1:20)]=rand()
-    end
-    Lfrac=[]
-    for i=1:20
-        if x[i]!=0.0 && x[i]!=1.0
-            push!(Lfrac,i)
-        end
-    end
-    @show x
-    @show Lfrac
-
-    # --------------------------------------------------------------------------
-    P=[]
-    push!(P,[rand(1:200) rand(800:1000) ])
-    while P[end][1]<900 && P[end][2]>100
-        push!(P,[rand(P[end][1]+1:min(1000,P[end][1]+500)) rand(max(1,P[end][2]-500):P[end][2]-1)])
-    end
-    # ---
-    fig = figure("test idees",figsize=(8,8))
-    xlim(0,1500)
-    ylim(0,1500)
-    for i=1:length(P)
-        scatter(P[i][1],P[i][2], color="black")
-    end
-    i=rand(1:length(P)-1)
-    a=P[i]
-    x1,y1 = a
-    b=P[i+1]
-    x2,y2 = b
-    Δx = abs(x1-x2)
-    Δy = abs(y1-y2)
-    λ1 =  1 - Δx / (Δx+Δy)
-    λ2 =  1 - Δy / (Δx+Δy)
-    @show P
-    @show a
-    @show b
-    @show Δx
-    @show Δy
-    println("directions deduites localement")
-    @show λ1
-    @show λ2
-    xlim(0,1000)
-    ylim(0,1000)
-    scatter(x1, y1, color="red", marker="x")
-    scatter(x2, y2, color="red", marker="x")
-    zλ = λ1 * dot(c1,x) + λ2 * dot(c2,x)
-    #----
-    n1=P[end][1]
-    n2=P[1][2]
-    xm=(x1+x2)/2.0
-    ym=(y1+y2)/2.0
-    Δx = abs(n1-xm)
-    Δy = abs(n2-ym)
-    λ1 =  1 - Δx / (Δx+Δy)
-    λ2 =  1 - Δy / (Δx+Δy)
-    @show Δx
-    @show Δy
-    println("directions deduites globalement")
-    @show λ1
-    @show λ2
-    plot(n1, n2, xm, ym, linestyle="-", color="blue", marker="+")
-    annotate("",
-	xy=[xm;ym],# Arrow tip
-	xytext=[n1;n2], # Text offset from tip
-	arrowprops=Dict("arrowstyle"=>"->"))
-
-    # --------------------------------------------------------------------------
-    for f in Lfrac  @printf("%5d ",f) end ; @printf("\n")
-    for f in Lfrac  @printf("%5d ",c1[f]) end; @printf("\n")
-    for f in Lfrac  @printf("%5d ",c2[f]) end; @printf("\n")
-    for f in Lfrac  @printf("%5.2f ",λ1*c1[f]+λ2*c2[f]) end; @printf("\n")
-    for f in Lfrac  @printf("%5.2f ",x[f]) end; @printf("\n")
-
-end
-
-#testidee()
-#mainXG4("biosppaa02.txt", 6, 5)
-mainXG4("../SPA/instances/biosppaa02.txt", 6, 5)
+#mainGM("biosppaa02.txt", 6, 5)
+mainGM("../SPA/instances/biosppaa02.txt", 6, 5)
 nothing

@@ -7,8 +7,13 @@ const verbose = true
 const graphic = true
 
 println("-) Active les packages requis\n")
-using JuMP, GLPK, PyPlot, Printf
+using JuMP, GLPK, PyPlot, Printf, Random
 verbose ? println("  Fait \n") : nothing
+
+include("GMparsers.jl")        # parsers of instances and non-dominated points
+include("GMjumpModels.jl")     # JuMP models for computing optima
+include("GMmopPrimitives.jl")  # usuals algorithms in multiobjective optimization
+
 
 # ==============================================================================
 
@@ -44,58 +49,6 @@ XInt  = (Int64)[];   YInt  = (Int64)[]   # liste des points (x,y) entiers
 XProj = (Float64)[]; YProj = (Float64)[] # liste des points (x,y) projetes
 XFeas = (Int64)[];   YFeas = (Int64)[]   # liste des points (x,y) admissibles
 XPert = (Int64)[];   YPert = (Int64)[]   # liste des points (x,y) perturbes
-
-
-# ==============================================================================
-# Parseur lisant un fichier 2-SPA
-
-function load2SPA(fname::String)
-
-    f = open("SPA_Databio/"*"bio"*fname)
-    nbctr, nbvar = parse.(Int, split(readline(f))) # nombre de contraintes , nombre de variables
-    A = zeros(Int, nbctr, nbvar)                   # matrice des contraintes
-    c1 = zeros(Int, nbvar)                         # vecteur des couts
-    c2 = zeros(Int, nbvar)                         # deuxième vecteur des couts
-    nb = zeros(Int, nbvar)
-    for i in 1:nbvar
-        flag = 1
-        for valeur in split(readline(f))
-            if flag == 1
-                c1[i] = parse(Int, valeur)
-                flag +=1
-            elseif flag == 2
-                c2[i] = parse(Int, valeur)
-                flag +=1
-            elseif flag == 3
-                nb[i] = parse(Int, valeur)
-                flag +=1
-            else
-                j = parse(Int, valeur)
-                A[j,i] = 1
-            end
-        end
-    end
-    close(f)
-    return c1, c2, A
-end
-
-
-# ==============================================================================
-# Parseur lisant un fichier de Y_N (dans dossier archive) pour le 2-SPA traite
-
-function readYN(fname::String)
-    fname = "Archive/Y_N_"*fname
-    f = open(fname)
-    temps = parse.(Float64, readline(f))
-    len = parse.(Int, readline(f))
-    x = Vector{Float64}(undef, len)
-    y = Vector{Float64}(undef, len)
-    for i in 1:len
-        x[i], y[i] =  parse.(Float64, split(readline(f)))
-    end
-    close(f)
-    return x, y
-end
 
 
 # ==============================================================================
@@ -150,37 +103,11 @@ function ajouterXbar!(vg::Vector{tGenerateur}, k::Int64, x::Vector{Float64}, y::
 end
 
 
-# ==============================================================================
-# Relaxation linéaire de epsilon-contrainte sur un objectif
-
-function relaxLinEpsilon( nbvar::Int,
-                          nbctr::Int,
-                          A::Array{Int,2},
-                          c1::Array{Int,1},
-                          c2::Array{Int,1},
-                          epsilon,
-                          obj
-                        )
-
-    model = Model(GLPK.Optimizer)
-    @variable(model, 0.0 <= x[1:nbvar] <= 1.0 )
-    @constraint(model, [i=1:nbctr],(sum((x[j]*A[i,j]) for j in 1:nbvar)) == 1)
-    if obj == 1
-        @objective(model, Min, sum((c1[i])*x[i] for i in 1:nbvar))
-        @constraint(model, sum((c2[i])*x[i] for i in 1:nbvar) <= epsilon)
-    else
-        @objective(model, Min, sum((c2[i])*x[i] for i in 1:nbvar))
-        @constraint(model, sum((c1[i])*x[i] for i in 1:nbvar) <= epsilon)
-    end
-    optimize!(model)
-    return objective_value(model), value.(x)
-end
-
 
 # ==============================================================================
 # Elabore 2 ensembles d'indices selon que xTilde[i] vaut 0 ou 1
 
-function splitXG(xTilde)
+function split01(xTilde)
 
    indices0 = (Int64)[]
    indices1 = (Int64)[]
@@ -200,11 +127,11 @@ end
 # ==============================================================================
 # Projete xTilde sur le polyedre X
 
-function Δ2(A::Array{Int,2}, xTilde::Array{Int,1})
+function Δ2SPA(A::Array{Int,2}, xTilde::Array{Int,1})
 
     nbctr = size(A,1)
     nbvar = size(A,2)
-    idxTilde0, idxTilde1 = splitXG(xTilde)
+    idxTilde0, idxTilde1 = split01(xTilde)
 
     proj = Model(GLPK.Optimizer)
     @variable(proj, 0.0 <= x[1:length(xTilde)] <= 1.0 )
@@ -217,11 +144,11 @@ end
 # ==============================================================================
 # Projete xTilde sur le polyedre X
 
-function Δ2bis(A::Array{Int,2}, xTilde::Array{Int,1}, c1, c2, k, λ1, λ2)
+function Δ2SPAbis(A::Array{Int,2}, xTilde::Array{Int,1}, c1, c2, k, λ1, λ2)
 
     nbctr = size(A,1)
     nbvar = size(A,2)
-    idxTilde0, idxTilde1 = splitXG(xTilde)
+    idxTilde0, idxTilde1 = split01(xTilde)
 
 #    cλ = 0.5.*c1 + 0.5.*c2
     proj = Model(GLPK.Optimizer)
@@ -317,7 +244,7 @@ function calculGenerateurs(A, c1, c2, tailleSampling, minf1RL, maxf2RL, maxf1RL,
             verbose ? @printf("  z1 %2d : ϵ = %8.2f  ", j1, maxf2RL - (j1-1) * pasSample2) : nothing # echantillonage sur z2
 
             # calcul d'une solution epsilon-contrainte
-            f1RL, xf1RL = relaxLinEpsilon(nbvar, nbctr, A, c1, c2, maxf2RL - (j1-1) * pasSample2, 1)
+            f1RL, xf1RL = computeLinearRelax2SPA(nbvar, nbctr, A, c1, c2, maxf2RL - (j1-1) * pasSample2, 1)
 
             # reconditionne les valeurs 0 et 1 et arrondi les autres valeurs
             nettoyageSolution!(xf1RL)
@@ -342,7 +269,7 @@ function calculGenerateurs(A, c1, c2, tailleSampling, minf1RL, maxf2RL, maxf1RL,
             verbose ? @printf("  z2 %2d : ϵ = %8.2f  ", j2, maxf1RL - (j2-1) * pasSample1) : nothing # echantillonage sur z1
 
             # calcul d'une solution epsilon-contrainte
-            f2RL, xf2RL = relaxLinEpsilon(nbvar, nbctr, A, c1, c2, maxf1RL - (j2-1) * pasSample1, 2)
+            f2RL, xf2RL = computeLinearRelax2SPA(nbvar, nbctr, A, c1, c2, maxf1RL - (j2-1) * pasSample1, 2)
 
             # reconditionne les valeurs 0 et 1 et arrondi les autres valeurs
             nettoyageSolution!(xf2RL)
@@ -424,13 +351,10 @@ end
   A    Point de départ du secteur (point adjacent inferieur)
   B    Point d'arrivée du secteur (point adjacent superieur)
   sortie : Booléen indiquant si le point est dans le secteur ou non.
-
   Exemple :
-
   B=point(2.0,1.0)
   O=point(2.5,2.5)
   A=point(5.0,5.0)
-
   M=point(5.0,4.0)
   inSector(M, O, A, B)
 =#
@@ -823,8 +747,8 @@ function projectingSolution!(vg,k,A,c1,c2,λ1,λ2)
     # --------------------------------------------------------------------------
     # Projete la solution entiere sur le polytope X avec norme-L1
 
-#    fPrj, vg[k].sPrj.x = Δ2(A,vg[k].sInt.x)
-    fPrj, vg[k].sPrj.x = Δ2bis(A,vg[k].sInt.x, c1, c2,k,λ1,λ2)
+#    fPrj, vg[k].sPrj.x = Δ2SPA(A,vg[k].sInt.x)
+    fPrj, vg[k].sPrj.x = Δ2SPAbis(A,vg[k].sInt.x, c1, c2,k,λ1,λ2)
 
     # Nettoyage de la valeur de vg[k].sPrj.x et calcul du point bi-objectif
     # reconditionne les valeurs 0 et 1 et arrondi les autres valeurs
@@ -972,7 +896,7 @@ function perturbSolution30!(vg,k,c1,c2)
 
     # liste des candidats (valeur, indice) et tri decroissant
     nbvar = length(vg[k].sInt.x)
-    idxTilde0, idxTilde1 = splitXG(vg[k].sInt.x)
+    idxTilde0, idxTilde1 = split01(vg[k].sInt.x)
 
 #    candidats=[( abs( vg[k].sPrj.x[i] - vg[k].sInt.x[i] ) , i ) for i=1:nbvar if vg[k].sPrj.x[i]>0 && vg[k].sPrj.x[i]<1]
     candidats=[( vg[k].sPrj.x[i] , i ) for i=1:nbvar if vg[k].sPrj.x[i]>0 && vg[k].sPrj.x[i]<1]
@@ -1029,7 +953,7 @@ function GM( fname::String,
     verbose ? println("  instance = $fname | tailleSampling = $tailleSampling | maxTrial = $maxTrial | maxTime = $maxTime\n\n") : nothing
 
     # chargement de l'instance numerique ---------------------------------------
-    c1, c2, A = load2SPA(fname) # instance numerique de SPA
+    c1, c2, A = loadInstance2SPA(fname) # instance numerique de SPA
     nbctr = size(A,1)
     nbvar = size(A,2)
     nbobj = 2
@@ -1040,11 +964,11 @@ function GM( fname::String,
     @printf("1) calcule les etendues de valeurs sur les 2 objectifs\n\n")
 
     # calcule la valeur optimale relachee de f1 seule et le point (z1,z2) correspondant
-    f1RL, xf1RL = relaxLinEpsilon(nbvar, nbctr, A, c1, c2, typemax(Int), 1) # opt fct 1
+    f1RL, xf1RL = computeLinearRelax2SPA(nbvar, nbctr, A, c1, c2, typemax(Int), 1) # opt fct 1
     minf1RL, maxf2RL = evaluerSolution(xf1RL, c1, c2)
 
     # calcule la valeur optimale relachee de f2 seule et le point (z1,z2) correspondant
-    f2RL, xf2RL = relaxLinEpsilon(nbvar, nbctr, A, c1, c2, typemax(Int), 2) # opt fct 2
+    f2RL, xf2RL = computeLinearRelax2SPA(nbvar, nbctr, A, c1, c2, typemax(Int), 2) # opt fct 2
     maxf1RL, minf2RL = evaluerSolution(xf2RL, c1, c2)
 
     verbose ? @printf("  f1_min=%8.2f ↔ f1_max=%8.2f (Δ=%.2f) \n",minf1RL, maxf1RL, maxf1RL-minf1RL) : nothing
@@ -1215,17 +1139,24 @@ function GM( fname::String,
 #    @show XFeas
 #    @show YFeas
 
+    # Donne l'ensemble bornant primal obtenu + la frontiere correspondante -----
+    X_EBP_frontiere, Y_EBP_frontiere, X_EBP, Y_EBP = ExtractEBP(XFeas, YFeas)
+    plot(X_EBP_frontiere, Y_EBP_frontiere, color="green", markersize=3.0, marker="x")
+    scatter(X_EBP, Y_EBP, color="green", s = 150, alpha = 0.3, label = L"y \in U")  
+    @show X_EBP
+    @show Y_EBP 
+
+    # Donne les points qui ont fait l'objet d'une perturbation -----------------
      scatter(XPert,YPert, color="magenta", marker="s", label ="pertub")
 
-#    plot(XSN, YSN, color="green", marker=".")
-#    scatter(XSNR, YSNR, color="green", label = L"y \in U", s = 150, alpha = 0.3)
-
-     XN,YN = readYN(fname)
+    # Donne les points non-domines exacts de cette instance --------------------
+     XN,YN = loadNDPoints2SPA(fname)
      plot(XN, YN, color="black", linewidth=0.75, marker="+", markersize=1.0, linestyle=":", label = L"y \in Y_N")
      scatter(XN, YN, color="black", marker="+")
 #    @show X_Y_N
 #    @show Y_Y_N
 
+    # Affiche le cadre avec les legendes des differents traces -----------------
     legend(bbox_to_anchor=[1,1], loc=0, borderaxespad=0, fontsize = "x-small")
     #PyPlot.title("Cone | 1 rounding | 2-$fname")
 
@@ -1236,7 +1167,7 @@ end
 #testidee()
 #@time GM("sppaa02.txt", 6, 20, 20)
 #@time GM("sppnw03.txt", 6, 20, 20)
-@time GM("sppnw10.txt", 6, 20, 20)
-#@time GM("didactic5SPA.txt", 5, 5, 10)
+#@time GM("sppnw10.txt", 6, 20, 20)
+@time GM("didactic5.txt", 5, 5, 10)
 #@time GM("sppnw29.txt", 6, 30, 20)
 nothing

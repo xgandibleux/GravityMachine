@@ -1,25 +1,26 @@
 **Notice:**
 
-The source codes provided in this folder are versions under development and old prototypes. 
+The source codes provided in this folder are versions under development and obsolete prototypes. 
 
 In any case they are not stable and are not ready for conducting comparative numerical experiments. 
 
-Currently the source codes are documented only in french.
+Currently the source codes are documented mainly in french.
 
 ***
 
 **Source codes:**
 
-- `gravityMachineV3.jl`code XG
-- `SPA_GM.jl` code utilise pour le papier, GG 
-- `GM.jl`code reecrit, XG 
-- `testcones.jl`code de visu des cones XG
+- `GMmain.jl` version under development (January 2022)
+- others | `testCones.jl` code for displaying the cones
+- others | `testDirections`code for computing the directions
+- obsolete | vRefactoring2021 | `gravityMachineV4.jl` starting point of the refactoring
+- obsolete | vConferences2021 | `SPA_GM.jl` very first version used for talks presented in 2021
 
 ***
 
 **Configuration required:**
 
-Packages Julia required:
+Packages Julia to add:
 
 - JuMP
 - GLPK
@@ -36,5 +37,5 @@ MIP Solver required:
 - get a local copy of this repository
 - open a Julia REPL
 - set the current directory to `src`
-- type into the REPL `include("gravityMachineV3.jl")`
+- type into the REPL `include("GMmain.jl")`
 
