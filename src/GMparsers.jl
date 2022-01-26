@@ -40,11 +40,12 @@ function loadNDPoints2SPA(fname::String)
     f = open(fname)
     temps = parse.(Float64, readline(f))
     len = parse.(Int, readline(f))
-    x = Vector{Float64}(undef, len)
-    y = Vector{Float64}(undef, len)
+    xN = Vector{Int64}(undef, len)
+    yN = Vector{Int64}(undef, len)
     for i in 1:len
-        x[i], y[i] =  parse.(Float64, split(readline(f)))
+        x, y =  parse.(Float64, split(readline(f)))
+        xN[i],yN[i] = round(Int,x),round(Int,y)
     end
     close(f)
-    return x, y
+    return xN, yN
 end
