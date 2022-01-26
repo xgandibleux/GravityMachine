@@ -564,8 +564,8 @@ function GM( fname::String,
      XN,YN = loadNDPoints2SPA(fname)
      plot(XN, YN, color="black", linewidth=0.75, marker="+", markersize=1.0, linestyle=":", label = L"y \in Y_N")
      scatter(XN, YN, color="black", marker="+")
-#    @show X_Y_N
-#    @show Y_Y_N
+    @show XN
+    @show YN
 
     # Affiche le cadre avec les legendes des differents traces -----------------
     legend(bbox_to_anchor=[1,1], loc=0, borderaxespad=0, fontsize = "x-small")
