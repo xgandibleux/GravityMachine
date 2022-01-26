@@ -17,10 +17,11 @@ include("GMdatastructures.jl") # types, datastructures and global variables spec
 include("GMparsers.jl")        # parsers of instances and non-dominated points
 include("GMgenerators.jl")     # compute the generators giving the L bound set
 include("GMjumpModels.jl")     # JuMP models for computing relaxed optima of the SPA
-include("GMrounding.jl")       # Startegies for rounding a LP-solution to a 01-solution 
+include("GMrounding.jl")       # Startegies for rounding a LP-solution to a 01-solution
 include("GMprojection.jl")     # JuMP models for computing the projection on the polytope of the SPA
 include("GMmopPrimitives.jl")  # usuals algorithms in multiobjective optimization
 include("GMperturbation.jl")   # routines dealing with the perturbation of a solution when a cycle is detected
+include("GMquality.jl")        # quality indicator of the bound set U generated
 
 
 # ==============================================================================
@@ -280,7 +281,7 @@ end
 # ==============================================================================
 # Calcule la direction d'interet du nadir vers le milieu de segment reliant deux points generateurs
 function calculerDirections(L::Vector{tSolution{Float64}}, vg::Vector{tGenerateur})
-   # function calculerDirections(L, vg::Vector{tGenerateur})    
+   # function calculerDirections(L, vg::Vector{tGenerateur})
 
     nbgen = size(vg,1)
     for k in 2:nbgen
@@ -354,7 +355,7 @@ function GM( fname::String,
              maxTime::Int64
            )
 
-    @assert tailleSampling>=3 "Erreur : Au moins 3 sont requis"  
+    @assert tailleSampling>=3 "Erreur : Au moins 3 sont requis"
 
     @printf("0) instance et parametres \n\n")
     verbose ? println("  instance = $fname | tailleSampling = $tailleSampling | maxTrial = $maxTrial | maxTime = $maxTime\n\n") : nothing
@@ -549,12 +550,12 @@ function GM( fname::String,
 #    @show d.YFeas
 
     # Donne l'ensemble bornant primal obtenu + la frontiere correspondante -----
-    #--> TODO : stocker l'EBP dans U proprement  
+    #--> TODO : stocker l'EBP dans U proprement
     X_EBP_frontiere, Y_EBP_frontiere, X_EBP, Y_EBP = ExtractEBP(d.XFeas, d.YFeas)
     plot(X_EBP_frontiere, Y_EBP_frontiere, color="green", markersize=3.0, marker="x")
-    scatter(X_EBP, Y_EBP, color="green", s = 150, alpha = 0.3, label = L"y \in U")  
+    scatter(X_EBP, Y_EBP, color="green", s = 150, alpha = 0.3, label = L"y \in U")
     @show X_EBP
-    @show Y_EBP 
+    @show Y_EBP
 
     # Donne les points qui ont fait l'objet d'une perturbation -----------------
      scatter(d.XPert,d.YPert, color="magenta", marker="s", label ="pertub")
@@ -570,13 +571,14 @@ function GM( fname::String,
     legend(bbox_to_anchor=[1,1], loc=0, borderaxespad=0, fontsize = "x-small")
     #PyPlot.title("Cone | 1 rounding | 2-$fname")
 
-    #--> TODO : integrer la mesure de qualite de EBP
+    # Compute the quality indicator of the bound set U generated ---------------
+    quality = qualityMeasure(XN,YN, X_EBP,Y_EBP)
+    @printf("Quality measure: %5.2f %%\n", quality*100)
 
 end
 
 # ==============================================================================
 
-#testidee()
 #@time GM("sppaa02.txt", 6, 20, 20)
 #@time GM("sppnw03.txt", 6, 20, 20) #pb glpk
 #@time GM("sppnw10.txt", 6, 20, 20)
