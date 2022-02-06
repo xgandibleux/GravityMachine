@@ -75,8 +75,17 @@ function roundingSolution!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, 
 
     if length(vg[k].sInt.x) ≤ 20 @show vg[k].sInt.x end
     @printf("→ #round : %4d → [ %5d , %5d ] ", nbVarNonEntiere, vg[k].sInt.y[1], vg[k].sInt.y[2])
-    push!(d.XInt,vg[k].sInt.y[1])
-    push!(d.YInt,vg[k].sInt.y[2])
+
+    # archive le point obtenu pour les besoins d'affichage
+    if generateurVisualise == -1 
+        # archivage pour tous les generateurs
+        push!(d.XInt,vg[k].sInt.y[1])
+        push!(d.YInt,vg[k].sInt.y[2])
+    elseif generateurVisualise == k
+        # archivage seulement pour le generateur k
+        push!(d.XInt,vg[k].sInt.y[1])
+        push!(d.YInt,vg[k].sInt.y[2])
+    end  
 
 end
 
@@ -184,8 +193,17 @@ function roundingSolutionnew24!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int
 
     if length(vg[k].sInt.x) ≤ 20 @show vg[k].sInt.x end
     @printf("→ #round : %4d → [ %5d , %5d ] ", nbVarNonEntiere, vg[k].sInt.y[1], vg[k].sInt.y[2])
-    push!(d.XInt,vg[k].sInt.y[1])
-    push!(d.YInt,vg[k].sInt.y[2])
+
+    # archive le point obtenu pour les besoins d'affichage
+    if generateurVisualise == -1 
+        # archivage pour tous les generateurs
+        push!(d.XInt,vg[k].sInt.y[1])
+        push!(d.YInt,vg[k].sInt.y[2])
+    elseif generateurVisualise == k
+        # archivage seulement pour le generateur k
+        push!(d.XInt,vg[k].sInt.y[1])
+        push!(d.YInt,vg[k].sInt.y[2])
+    end      
 
 end
 
@@ -292,7 +310,16 @@ function roundingSolutionNew23!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int
 
 #    if length(vg[k].sInt.x) ≤ 20 @show vg[k].sInt.x end
     @printf("→ #round : %4d → [ %5d , %5d ] ", nbVarNonEntiere, vg[k].sInt.y[1], vg[k].sInt.y[2])
-    push!(d.XInt,vg[k].sInt.y[1])
-    push!(d.YInt,vg[k].sInt.y[2])
+
+    # archive le point obtenu pour les besoins d'affichage
+    if generateurVisualise == -1 
+        # archivage pour tous les generateurs
+        push!(d.XInt,vg[k].sInt.y[1])
+        push!(d.YInt,vg[k].sInt.y[2])
+    elseif generateurVisualise == k
+        # archivage seulement pour le generateur k
+        push!(d.XInt,vg[k].sInt.y[1])
+        push!(d.YInt,vg[k].sInt.y[2])
+    end      
 
 end

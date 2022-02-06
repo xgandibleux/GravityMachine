@@ -10,6 +10,7 @@ println("-) Active les packages requis\n")
 using JuMP, GLPK, PyPlot, Printf, Random
 verbose ? println("  Fait \n") : nothing
 
+generateurVisualise = -1
 
 # ==============================================================================
 
@@ -335,16 +336,26 @@ function calculerDirections2(L::Vector{tSolution{Float64}}, vg::Vector{tGenerate
         @printf("  xm= %7.2f   ym= %7.2f ",xm,ym)
         @printf("  Δx= %8.2f    Δy= %8.2f ",Δx,Δy)
         @printf("  λ1= %6.5f    λ2= %6.5f \n",λ1[k],λ2[k])
-        plot(n1, n2, xm, ym, linestyle="-", color="blue", marker="+")
-        annotate("",
-                 xy=[xm;ym],# Arrow tip
-                 xytext=[n1;n2], # Text offset from tip
-                 arrowprops=Dict("arrowstyle"=>"->"))
+        if generateurVisualise == -1 
+            # affichage pour tous les generateurs
+            plot(n1, n2, xm, ym, linestyle="-", color="blue", marker="+")
+            annotate("",
+                     xy=[xm;ym],# Arrow tip
+                     xytext=[n1;n2], # Text offset from tip
+                     arrowprops=Dict("arrowstyle"=>"->"))        
+        elseif generateurVisualise == k
+            # affichage seulement pour le generateur k
+            plot(n1, n2, xm, ym, linestyle="-", color="blue", marker="+")
+            annotate("",
+                     xy=[xm;ym],# Arrow tip
+                     xytext=[n1;n2], # Text offset from tip
+                     arrowprops=Dict("arrowstyle"=>"->"))        
+        end 
         #println("")
     end
     return λ1, λ2
 end
-
+ 
 
 # ==============================================================================
 # point d'entree principal
@@ -412,9 +423,17 @@ function GM( fname::String,
         if estAdmissible(vg[k].sRel.x)
             ajouterXtilde!(vg, k, convert.(Int, vg[k].sRel.x), convert.(Int, L[k].y))
             vg[k].sFea   = true
-            push!(d.XFeas,vg[k].sInt.y[1])
-            push!(d.YFeas,vg[k].sInt.y[2])
             verbose ? @printf("→ Admissible \n") : nothing
+            # archive le point obtenu pour les besoins d'affichage    
+            if generateurVisualise == -1 
+                # archivage pour tous les generateurs
+                push!(d.XFeas,vg[k].sInt.y[1])
+                push!(d.YFeas,vg[k].sInt.y[2])
+            elseif generateurVisualise == k
+                # archivage seulement pour le generateur k
+                push!(d.XFeas,vg[k].sInt.y[1])
+                push!(d.YFeas,vg[k].sInt.y[2])
+            end 
         else
             vg[k].sFea   = false
             verbose ? @printf("→ x          \n") : nothing
@@ -572,8 +591,11 @@ function GM( fname::String,
     #PyPlot.title("Cone | 1 rounding | 2-$fname")
 
     # Compute the quality indicator of the bound set U generated ---------------
-    quality = qualityMeasure(XN,YN, X_EBP,Y_EBP)
-    @printf("Quality measure: %5.2f %%\n", quality*100)
+    # Need at least 2 points in EBP to compute the quality indicator
+    if length(X_EBP) > 1
+        quality = qualityMeasure(XN,YN, X_EBP,Y_EBP)
+        @printf("Quality measure: %5.2f %%\n", quality*100)
+    end
 
 end
 

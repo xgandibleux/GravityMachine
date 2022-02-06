@@ -1,5 +1,6 @@
 # ==============================================================================
-# Projete xTilde sur le polyedre X
+# Projete xTilde sur le polyedre X du SPA avec norme-L1
+# version FP 2005
 
 function Δ2SPA(A::Array{Int,2}, xTilde::Array{Int,1})
 
@@ -16,7 +17,8 @@ function Δ2SPA(A::Array{Int,2}, xTilde::Array{Int,1})
 end
 
 # ==============================================================================
-# Projete xTilde sur le polyedre X
+# Projete xTilde sur le polyedre X du SPA avec norme-L1
+# version avec somme ponderee donnant la direction vers le generateur k
 
 function Δ2SPAbis(A::Array{Int,2}, xTilde::Array{Int,1}, 
                   c1::Array{Int,1}, c2::Array{Int,1}, k::Int64, λ1::Vector{Float64}, λ2::Vector{Float64})
@@ -44,7 +46,7 @@ function projectingSolution!(vg::Vector{tGenerateur}, k::Int64,
                              d::tListDisplay)
 
     # --------------------------------------------------------------------------
-    # Projete la solution entiere sur le polytope X avec norme-L1
+    # Projete la solution entiere sur le polytope X 
 
 #    fPrj, vg[k].sPrj.x = Δ2SPA(A,vg[k].sInt.x)
     fPrj, vg[k].sPrj.x = Δ2SPAbis(A,vg[k].sInt.x,c1,c2,k,λ1,λ2)
@@ -58,25 +60,47 @@ function projectingSolution!(vg::Vector{tGenerateur}, k::Int64,
     vg[k].sPrj.y[1], vg[k].sPrj.y[2] = evaluerSolution(vg[k].sPrj.x, c1, c2)
     verbose ? @printf("  %2dP : [ %8.2f , %8.2f ] ",k, vg[k].sPrj.y[1], vg[k].sPrj.y[2]) : nothing
 
-    push!(d.XProj, vg[k].sPrj.y[1])
-    push!(d.YProj, vg[k].sPrj.y[2])
+    # archive le point obtenu pour les besoins d'affichage
+    if generateurVisualise == -1 
+        # archivage pour tous les generateurs
+        push!(d.XProj, vg[k].sPrj.y[1])
+        push!(d.YProj, vg[k].sPrj.y[2])
+    elseif generateurVisualise == k
+        # archivage seulement pour le generateur k
+        push!(d.XProj, vg[k].sPrj.y[1])
+        push!(d.YProj, vg[k].sPrj.y[2])
+    end            
 
     # ----------------------------------------------------------------
     # Teste si la projection est admissible
 
     if estAdmissible(vg[k].sPrj.x)
+
+        # sauvegarde de la solution entiere admissible obtenue
         vg[k].sInt.x = deepcopy(vg[k].sPrj.x)
         vg[k].sInt.y[1] = vg[k].sPrj.y[1]
         vg[k].sInt.y[2] = vg[k].sPrj.y[2]
         vg[k].sFea = true
-        push!(d.XFeas, vg[k].sPrj.y[1])
-        push!(d.YFeas, vg[k].sPrj.y[2])
         @printf("→ Admissible "); print("                       ")
+
+        # archive le point obtenu pour les besoins d'affichage
+        if generateurVisualise == -1 
+            # archivage pour tous les generateurs
+            push!(d.XFeas, vg[k].sPrj.y[1])
+            push!(d.YFeas, vg[k].sPrj.y[2])
+        elseif generateurVisualise == k
+            # archivage seulement pour le generateur k
+            push!(d.XFeas, vg[k].sPrj.y[1])
+            push!(d.YFeas, vg[k].sPrj.y[2])
+        end  
+
     else
+
         vg[k].sFea = false
         @printf("→ x          "); print("                       ")
         # prepare pour l'iteration suivante
 #        vg[k].xRlx = deepcopy(vg[k].sPrj.x) !!!!!!!!!!!!!
+
     end
 
 end
