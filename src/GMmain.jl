@@ -282,35 +282,38 @@ end
 # ==============================================================================
 # Calcule la direction d'interet du nadir vers le milieu de segment reliant deux points generateurs
 function calculerDirections(L::Vector{tSolution{Float64}}, vg::Vector{tGenerateur})
-   # function calculerDirections(L, vg::Vector{tGenerateur})
-
-    nbgen = size(vg,1)
-    for k in 2:nbgen
-
-        n1 = L[end].y[1]
-        n2 = L[1].y[2]
-
-        x1,y1 = vg[k-1].sRel.y[1], vg[k-1].sRel.y[2]
-        x2,y2 = vg[k].sRel.y[1], vg[k].sRel.y[2]
-        xm=(x1+x2)/2.0
-        ym=(y1+y2)/2.0
-        Δx = abs(n1-xm)
-        Δy = abs(n2-ym)
-        λ1 =  1 - Δx / (Δx+Δy)
-        λ2 =  1 - Δy / (Δx+Δy)
-        @printf("  x1= %7.2f   y1= %7.2f \n",x1,y1)
-        @printf("  x2= %7.2f   y2= %7.2f \n",x2,y2)
-        @printf("  Δx= %7.2f    Δy= %7.2f \n",Δx,Δy)
-        @printf("  λ1= %6.5f    λ2= %6.5f \n",λ1,λ2)
-        plot(n1, n2, xm, ym, linestyle="-", color="blue", marker="+")
-        annotate("",
-                 xy=[xm;ym],# Arrow tip
-                 xytext=[n1;n2], # Text offset from tip
-                 arrowprops=Dict("arrowstyle"=>"->"))
-        println("")
-    end
-
-end
+    # function calculerDirections(L, vg::Vector{tGenerateur})
+ 
+     nbgen = size(vg,1)
+     λ1=Vector{Float64}(undef, nbgen - 1)
+     λ2=Vector{Float64}(undef, nbgen - 1)
+     for k in 2:nbgen
+ 
+         n1 = L[end].y[1]
+         n2 = L[1].y[2]
+ 
+         x1,y1 = vg[k-1].sRel.y[1], vg[k-1].sRel.y[2]
+         x2,y2 = vg[k].sRel.y[1], vg[k].sRel.y[2]
+         xm=(x1+x2)/2.0
+         ym=(y1+y2)/2.0
+         Δx = abs(n1-xm)
+         Δy = abs(n2-ym)
+         λ1[k-1] =  1 - Δx / (Δx+Δy)
+         λ2[k-1] =  1 - Δy / (Δx+Δy)
+         @printf("  k= %3d   \n",k)
+         @printf("  x1= %7.2f   y1= %7.2f \n",x1,y1)
+         @printf("  x2= %7.2f   y2= %7.2f \n",x2,y2)
+         @printf("  Δx= %7.2f    Δy= %7.2f \n",Δx,Δy)
+         @printf("  λ1= %6.5f    λ2= %6.5f \n",λ1[k-1],λ2[k-1])
+         plot(n1, n2, xm, ym, linestyle="-", color="blue", marker="+")
+         annotate("",
+                  xy=[xm;ym],# Arrow tip
+                  xytext=[n1;n2], # Text offset from tip
+                  arrowprops=Dict("arrowstyle"=>"->"))
+         println("")
+     end
+     return λ1, λ2
+ end
 
 
 # ==============================================================================
