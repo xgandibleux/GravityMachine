@@ -462,6 +462,8 @@ function GM( fname::String,
 
     @printf("4) terraformation generateur par generateur \n\n")
 
+    nbIterTotal = 0
+    nbgenNotFeasible = 0
     for k in [i for i in 1:nbgen if !isFeasible(vg,i)]
         temps = time()
         trial = 0
@@ -511,10 +513,10 @@ function GM( fname::String,
         elseif t3
             println("   maxTime \n")
         end
-
-
+        nbIterTotal += trial
+        nbgenNotFeasible += 1
     end
-
+    verbose ? @printf("   Nombre d'itération moyenne afin de trouver une solution admissible : %5.3f", nbIterTotal/nbgenNotFeasible) : nothing
     println("");
 
     # ==========================================================================
