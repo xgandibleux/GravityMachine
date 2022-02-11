@@ -449,7 +449,7 @@ function GM( fname::String,
     # --------------------------------------------------------------------------
     # Sortie graphique
 
-    figure("Gravity Machine",figsize=(6.5,5))
+    figure("$fname by Gravity Machine",figsize=(6.5,5))
     #xlim(25000,45000)
     #ylim(20000,40000)
     xlabel(L"z^1(x)")
@@ -605,10 +605,20 @@ function GM( fname::String,
 end
 
 # ==============================================================================
+# multi-instances in one run, the instances are took from "SPA/chosen_instances/"
+
+function GM_multi()
+    instances_dir = "../SPA/chosen_instances"
+    filenames = getfname(instances_dir)
+    for i in 1:length(filenames)
+        instance = filenames[i][4:end]
+        GM(instance, 6, 20, 20)
+    end
+end
 
 #@time GM("sppaa02.txt", 6, 20, 20)
 #@time GM("sppnw03.txt", 6, 20, 20) #pb glpk
 #@time GM("sppnw10.txt", 6, 20, 20)
-@time GM("didactic5.txt", 5, 5, 10)
+#@time GM("didactic5.txt", 5, 5, 10)
 #@time GM("sppnw29.txt", 6, 30, 20)
 nothing
