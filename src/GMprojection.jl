@@ -74,7 +74,22 @@ function projectingSolution!(vg::Vector{tGenerateur}, k::Int64,
     # Projete la solution entiere sur le polytope X 
 
 #    fPrj, vg[k].sPrj.x = Δ2SPA(A,vg[k].sInt.x)
-    fPrj, vg[k].sPrj.x = Δ2SPAbis(A,vg[k].sInt.x,c1,c2,k,λ1,λ2)
+
+    # --- biaise les coef de la fct obj i presentant le plus faible range sur zi dans Y ---17/2
+    # delta sur les 2 etendues de la valeur des points dans l'espace des objectifs
+    Δx = max(vg[1].sRel.y[1], vg[end].sRel.y[1]) - min(vg[1].sRel.y[1], vg[end].sRel.y[1])
+    Δy = max(vg[1].sRel.y[2], vg[end].sRel.y[2]) - min(vg[1].sRel.y[2], vg[end].sRel.y[2])    
+    # ratio entre les 2 etendues
+    rx=max(Δx,Δy)/Δx
+    ry=max(Δx,Δy)/Δy       
+    # vecteur des couts biaises
+    c1b = round.(Int64,c1*(max(Δx,Δy)/Δx))
+    c2b = round.(Int64,c2*(max(Δx,Δy)/Δy))
+
+    fPrj, vg[k].sPrj.x = Δ2SPAbis(A,vg[k].sInt.x,c1b,c2b,k,λ1,λ2)    
+#    fPrj, vg[k].sPrj.x = Δ2SPAbis(A,vg[k].sInt.x,c1,c2,k,λ1,λ2)
+    # --- fin biais 17/2
+
 #    fPrj, vg[k].sPrj.x = Δ2SPAbis2(A,vg,c1,c2,k,λ1,λ2)
 
     # Nettoyage de la valeur de vg[k].sPrj.x et calcul du point bi-objectif
