@@ -38,6 +38,36 @@ function Δ2SPAbis(A::Array{Int,2}, xTilde::Array{Int,1},
 end
 
 # ==============================================================================
+# Projete xTilde sur le polyedre X du SPA avec norme-L1
+# version avec somme ponderee donnant la direction vers le generateur k
+
+function Δ2SPAbis17Fev(A::Array{Int,2}, xTilde::Array{Int,1}, 
+    c1::Array{Int,1}, c2::Array{Int,1}, k::Int64, λ1::Vector{Float64}, λ2::Vector{Float64})
+
+nbctr = size(A,1)
+nbvar = size(A,2)
+idxTilde0, idxTilde1 = split01(xTilde)
+@show length(idxTilde1)
+
+cλ = λ1[k].*c1 + λ2[k].*c2
+proj = Model(GLPK.Optimizer)
+@variable(proj, 0.0 <= x[1:length(xTilde)] <= 1.0 )
+#    @objective(proj, Min, sum(λ1[k]*x[i] for i in idxTilde0) + sum(λ2[k]*(1-x[i]) for i in idxTilde1) )
+@objective(proj, Min, sum(cλ[i]*x[i] for i in idxTilde0) + sum(cλ[i]*(1-x[i]) for i in idxTilde1) )
+@constraint(proj, [i=1:nbctr],(sum((x[j]*A[i,j]) for j in 1:nbvar)) == 1)
+
+c1limit=sum(c1.*xTilde)*1.03
+c2limit=sum(c2.*xTilde)*1.03
+@show c1limit #, c1, xTilde
+@show c2limit #, c2, xTilde
+@constraint(proj, sum(c1[i]*x[i] for i in 1:nbvar) <= c1limit)
+@constraint(proj, sum(c2[i]*x[i] for i in 1:nbvar) <= c2limit)
+
+optimize!(proj)
+return objective_value(proj), value.(x)
+end
+
+# ==============================================================================
 # Projete xTilde sur le polyedre X
 # version avec somme ponderee donnant la direction vers le milieu de segment reliant deux points generateurs
 
@@ -86,8 +116,11 @@ function projectingSolution!(vg::Vector{tGenerateur}, k::Int64,
     c1b = round.(Int64,c1*(max(Δx,Δy)/Δx))
     c2b = round.(Int64,c2*(max(Δx,Δy)/Δy))
 
-    fPrj, vg[k].sPrj.x = Δ2SPAbis(A,vg[k].sInt.x,c1b,c2b,k,λ1,λ2)    
+    fPrj, vg[k].sPrj.x = Δ2SPAbis17Fev(A,vg[k].sInt.x,c1,c2,k,λ1,λ2)  
+#    fPrj, vg[k].sPrj.x = Δ2SPAbis(A,vg[k].sInt.x,c1b,c2b,k,λ1,λ2)    
 #    fPrj, vg[k].sPrj.x = Δ2SPAbis(A,vg[k].sInt.x,c1,c2,k,λ1,λ2)
+#    fPrj, vg[k].sPrj.x = Δ2SPAbis2(A,vg,c1,c2,k,λ1,λ2)
+
     # --- fin biais 17/2
 
 #    fPrj, vg[k].sPrj.x = Δ2SPAbis2(A,vg,c1,c2,k,λ1,λ2)
