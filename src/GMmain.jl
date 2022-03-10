@@ -336,26 +336,26 @@ function calculerDirections2(L::Vector{tSolution{Float64}}, vg::Vector{tGenerate
         @printf("  xm= %7.2f   ym= %7.2f ",xm,ym)
         @printf("  Δx= %8.2f    Δy= %8.2f ",Δx,Δy)
         @printf("  λ1= %6.5f    λ2= %6.5f \n",λ1[k],λ2[k])
-        if generateurVisualise == -1 
+        if generateurVisualise == -1
             # affichage pour tous les generateurs
             plot(n1, n2, xm, ym, linestyle="-", color="blue", marker="+")
             annotate("",
                      xy=[xm;ym],# Arrow tip
                      xytext=[n1;n2], # Text offset from tip
-                     arrowprops=Dict("arrowstyle"=>"->"))        
+                     arrowprops=Dict("arrowstyle"=>"->"))
         elseif generateurVisualise == k
             # affichage seulement pour le generateur k
             plot(n1, n2, xm, ym, linestyle="-", color="blue", marker="+")
             annotate("",
                      xy=[xm;ym],# Arrow tip
                      xytext=[n1;n2], # Text offset from tip
-                     arrowprops=Dict("arrowstyle"=>"->"))        
-        end 
+                     arrowprops=Dict("arrowstyle"=>"->"))
+        end
         #println("")
     end
     return λ1, λ2
 end
- 
+
 
 # ==============================================================================
 # point d'entree principal
@@ -364,12 +364,17 @@ function GM( fname::String,
              tailleSampling::Int64,
              maxTrial::Int64,
              maxTime::Int64
+             ;
+             figpath::String = ""
            )
 
     @assert tailleSampling>=3 "Erreur : Au moins 3 sont requis"
 
     @printf("0) instance et parametres \n\n")
     verbose ? println("  instance = $fname | tailleSampling = $tailleSampling | maxTrial = $maxTrial | maxTime = $maxTime\n\n") : nothing
+
+    # compteur nombre de cycle # -----------------------------------------------
+    nbCycle = 0
 
     # chargement de l'instance numerique ---------------------------------------
     c1, c2, A = loadInstance2SPA(fname) # instance numerique de SPA
@@ -424,8 +429,8 @@ function GM( fname::String,
             ajouterXtilde!(vg, k, convert.(Int, vg[k].sRel.x), convert.(Int, L[k].y))
             vg[k].sFea   = true
             verbose ? @printf("→ Admissible \n") : nothing
-            # archive le point obtenu pour les besoins d'affichage    
-            if generateurVisualise == -1 
+            # archive le point obtenu pour les besoins d'affichage
+            if generateurVisualise == -1
                 # archivage pour tous les generateurs
                 push!(d.XFeas,vg[k].sInt.y[1])
                 push!(d.YFeas,vg[k].sInt.y[2])
@@ -433,7 +438,7 @@ function GM( fname::String,
                 # archivage seulement pour le generateur k
                 push!(d.XFeas,vg[k].sInt.y[1])
                 push!(d.YFeas,vg[k].sInt.y[2])
-            end 
+            end
         else
             vg[k].sFea   = false
             verbose ? @printf("→ x          \n") : nothing
@@ -496,6 +501,7 @@ function GM( fname::String,
                 # test detection cycle sur solutions entieres ------------------
                 cycle = [vg[k].sInt.y[1],vg[k].sInt.y[2]] in H
                 if (cycle == true)
+                    nbCycle = nbCycle + 1
                     println("CYCLE!!!!!!!!!!!!!!!")
                     # perturb solution
                     perturbSolution30!(vg,k,c1,c2,d)
@@ -521,7 +527,7 @@ function GM( fname::String,
 
     @printf("5) Extraction des resultats\n\n")
 
-
+    @printf("  Nombre de cycle : %d\n", nbCycle)
     for k=1:nbgen
         verbose ? @printf("  %2d  : [ %8.2f , %8.2f ] ", k, vg[k].sInt.y[1],vg[k].sInt.y[2]) : nothing
         # test d'admissibilite et marquage de la solution le cas echeant -------
@@ -590,6 +596,12 @@ function GM( fname::String,
     legend(bbox_to_anchor=[1,1], loc=0, borderaxespad=0, fontsize = "x-small")
     #PyPlot.title("Cone | 1 rounding | 2-$fname")
 
+    # Sauvegarde la figure
+    (figpath != "") ? savefig(figpath) : nothing
+
+    # Efface la figure pour que le prochain plot soit propre
+    (figpath != "") ? clf() : nothing
+
     # Compute the quality indicator of the bound set U generated ---------------
     # Need at least 2 points in EBP to compute the quality indicator
     if length(X_EBP) > 1
@@ -600,10 +612,52 @@ function GM( fname::String,
 end
 
 # ==============================================================================
+# multi-instances in one run, the instances are took from "SPA/chosen_instances/"
+
+function GM_multi( tailleSampling::Int64,
+                   maxTrial::Int64,
+                   maxTime::Int64
+                   ;
+                   redirect::Bool = false,
+                   prefix::String = ""
+                 )
+    verbose ? println("Starting multi-instances run...\n") : nothing
+
+    instances_dir = "../SPA/chosen_instances"
+    filenames = getfname(instances_dir)
+
+    # Si on redirige les résultats vers des fichiers, on n'affiche pas les
+    # plots (ioff)
+    redirect ? ioff() : nothing
+    for i in 1:length(filenames)
+        instance = filenames[i][4:end]
+
+        file = split(instance, ".")[1]
+        logpath = prefix * "/log/" * file
+        errpath = prefix * "/err/" * file
+        figpath = prefix * "/fig/" * file
+
+        if redirect == true
+            print(file)
+            redirect_stdio(stdout=(logpath * ".log"), stderr=(errpath * ".err")) do
+                @time GM(instance, tailleSampling, maxTrial, maxTime, figpath=figpath * ".png")
+            end
+            println("   Done")
+        else
+            @time GM(instance, tailleSampling, maxTrial, maxTime)
+        end
+    end
+    # On réactive l'affichage normal des plots
+    redirect ? ion() : nothing
+
+    verbose ? println("\nAll instances done.") : nothing
+end
+
+GM_multi(10, 5, typemax(Int64), redirect = true, prefix = "../output")
 
 #@time GM("sppaa02.txt", 6, 20, 20)
 #@time GM("sppnw03.txt", 6, 20, 20) #pb glpk
 #@time GM("sppnw10.txt", 6, 20, 20)
-@time GM("didactic5.txt", 5, 5, 10)
+#@time GM("didactic5.txt", 5, 5, 10)
 #@time GM("sppnw29.txt", 6, 30, 20)
 nothing
