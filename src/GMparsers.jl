@@ -50,8 +50,8 @@ function loadNDPoints2SPA(fname::String)
     return xN, yN
 end
 
-# --------------------------------------------------------------------------- #
-# collect the un-hidden filenames available in a given folder
+# ==============================================================================
+# Collect the un-hidden filenames available in a given folder
 
 function getfname(pathtofolder)
 
@@ -74,4 +74,15 @@ function getfname(pathtofolder)
     # extrait les noms valides et retourne le vecteur correspondant
     finstances = allfiles[flag]
     return finstances
+end
+
+# ==============================================================================
+# Initialise le dictionnaire de type OrderedDict{String, Vector{Any}} passer en
+# paramètre (y ajoute les des clés comme "instance", "#U", etc.)
+
+function initCSVdict!(dict::OrderedDict{String, Vector{Any}})
+    dict["#C"] = []
+    dict["#U"] = []
+    dict["CPUt (s)"] = []
+    dict["r (%)"] = []
 end
