@@ -1,0 +1,1496 @@
+Algorithme "Gravity machine" --------------------------------
+
+-) Active les packages requis
+
+  Fait 
+
+Starting multi-instances run...
+
+Run #1. Pertubation function : perturbSolution!
+sppaa03_1Ac5c   Done
+sppaa05_1Ac5c   Done
+sppnw01_1Ac5c   Done
+sppnw03_1Ac5c   Done
+sppnw04_1Ac5c   Done
+sppnw05_1Ac5c   Done
+sppnw06_1Ac5c   Done
+sppnw07_1Ac5c   Done
+sppnw08_1Ac5c   Done
+sppnw09_1Ac5c   Done
+sppnw10_1Ac5c   Done
+sppnw11_1Ac5c   Done
+sppnw12_1Ac5c   Done
+sppnw13_1Ac5c   Done
+sppnw14_1Ac5c   Done
+sppnw15_1Ac5c   Done
+sppnw16_1Ac5c   Done
+sppnw17_1Ac5c   Done
+sppnw18_1Ac5c   Done
+sppnw19_1Ac5c   Done
+sppnw20_1Ac5c   Done
+sppnw21_1Ac5c   Done
+sppnw22_1Ac5c   Done
+sppnw23_1Ac5c   Done
+sppnw24_1Ac5c   Done
+sppnw25_1Ac5c   Done
+sppnw26_1Ac5c   Done
+sppnw27_1Ac5c   Done
+sppnw28_1Ac5c   Done
+sppnw29_1Ac5c   Done
+sppnw30_1Ac5c   Done
+sppnw31_1Ac5c   Done
+sppnw32_1Ac5c   Done
+sppnw33_1Ac5c   Done
+sppnw34_1Ac5c   Done
+sppnw35_1Ac5c   Done
+sppnw36_1Ac5c   Done
+sppnw37_1Ac5c   Done
+sppnw38_1Ac5c   Done
+sppnw39_1Ac5c   Done
+sppnw40_1Ac5c   Done
+sppnw41_1Ac5c   Done
+sppnw42_1Ac5c   Done
+sppnw43_1Ac5c   Done
+
+All instances done.
+
+Run #1. Pertubation function : perturbSolution30!
+sppaa03_1Ac5c   Done
+sppaa05_1Ac5c   Done
+sppnw01_1Ac5c   Done
+sppnw03_1Ac5c   Done
+sppnw04_1Ac5c   Done
+sppnw05_1Ac5c   Done
+sppnw06_1Ac5c   Done
+sppnw07_1Ac5c   Done
+sppnw08_1Ac5c   Done
+sppnw09_1Ac5c   Done
+sppnw10_1Ac5c   Done
+sppnw11_1Ac5c   Done
+sppnw12_1Ac5c   Done
+sppnw13_1Ac5c   Done
+sppnw14_1Ac5c   Done
+sppnw15_1Ac5c   Done
+sppnw16_1Ac5c   Done
+sppnw17_1Ac5c   Done
+sppnw18_1Ac5c   Done
+sppnw19_1Ac5c   Done
+sppnw20_1Ac5c   Done
+sppnw21_1Ac5c   Done
+sppnw22_1Ac5c   Done
+sppnw23_1Ac5c   Done
+sppnw24_1Ac5c   Done
+sppnw25_1Ac5c   Done
+sppnw26_1Ac5c   Done
+sppnw27_1Ac5c   Done
+sppnw28_1Ac5c   Done
+sppnw29_1Ac5c   Done
+sppnw30_1Ac5c   Done
+sppnw31_1Ac5c   Done
+sppnw32_1Ac5c   Done
+sppnw33_1Ac5c   Done
+sppnw34_1Ac5c   Done
+sppnw35_1Ac5c   Done
+sppnw36_1Ac5c   Done
+sppnw37_1Ac5c   Done
+sppnw38_1Ac5c   Done
+sppnw39_1Ac5c   Done
+sppnw40_1Ac5c   Done
+sppnw41_1Ac5c   Done
+sppnw42_1Ac5c   Done
+sppnw43_1Ac5c   Done
+
+All instances done.
+
+Run #1. Pertubation function : perturbSolution28a!
+sppaa03_1Ac5c   Done
+sppaa05_1Ac5c   Done
+sppnw01_1Ac5c   Done
+sppnw03_1Ac5c   Done
+sppnw04_1Ac5c   Done
+sppnw05_1Ac5c   Done
+sppnw06_1Ac5c   Done
+sppnw07_1Ac5c   Done
+sppnw08_1Ac5c   Done
+sppnw09_1Ac5c   Done
+sppnw10_1Ac5c   Done
+sppnw11_1Ac5c   Done
+sppnw12_1Ac5c   Done
+sppnw13_1Ac5c   Done
+sppnw14_1Ac5c   Done
+sppnw15_1Ac5c   Done
+sppnw16_1Ac5c   Done
+sppnw17_1Ac5c   Done
+sppnw18_1Ac5c   Done
+sppnw19_1Ac5c   Done
+sppnw20_1Ac5c   Done
+sppnw21_1Ac5c   Done
+sppnw22_1Ac5c   Done
+sppnw23_1Ac5c   Done
+sppnw24_1Ac5c   Done
+sppnw25_1Ac5c   Done
+sppnw26_1Ac5c   Done
+sppnw27_1Ac5c   Done
+sppnw28_1Ac5c   Done
+sppnw29_1Ac5c   Done
+sppnw30_1Ac5c   Done
+sppnw31_1Ac5c   Done
+sppnw32_1Ac5c   Done
+sppnw33_1Ac5c   Done
+sppnw34_1Ac5c   Done
+sppnw35_1Ac5c   Done
+sppnw36_1Ac5c   Done
+sppnw37_1Ac5c   Done
+sppnw38_1Ac5c   Done
+sppnw39_1Ac5c   Done
+sppnw40_1Ac5c   Done
+sppnw41_1Ac5c   Done
+sppnw42_1Ac5c   Done
+sppnw43_1Ac5c   Done
+
+All instances done.
+
+Exporting run to CSV...
+
+Done
+
+Run #2. Pertubation function : perturbSolution!
+sppaa03_jltgy   Done
+sppaa05_jltgy   Done
+sppnw01_jltgy   Done
+sppnw03_jltgy   Done
+sppnw04_jltgy   Done
+sppnw05_jltgy   Done
+sppnw06_jltgy   Done
+sppnw07_jltgy   Done
+sppnw08_jltgy   Done
+sppnw09_jltgy   Done
+sppnw10_jltgy   Done
+sppnw11_jltgy   Done
+sppnw12_jltgy   Done
+sppnw13_jltgy   Done
+sppnw14_jltgy   Done
+sppnw15_jltgy   Done
+sppnw16_jltgy   Done
+sppnw17_jltgy   Done
+sppnw18_jltgy   Done
+sppnw19_jltgy   Done
+sppnw20_jltgy   Done
+sppnw21_jltgy   Done
+sppnw22_jltgy   Done
+sppnw23_jltgy   Done
+sppnw24_jltgy   Done
+sppnw25_jltgy   Done
+sppnw26_jltgy   Done
+sppnw27_jltgy   Done
+sppnw28_jltgy   Done
+sppnw29_jltgy   Done
+sppnw30_jltgy   Done
+sppnw31_jltgy   Done
+sppnw32_jltgy   Done
+sppnw33_jltgy   Done
+sppnw34_jltgy   Done
+sppnw35_jltgy   Done
+sppnw36_jltgy   Done
+sppnw37_jltgy   Done
+sppnw38_jltgy   Done
+sppnw39_jltgy   Done
+sppnw40_jltgy   Done
+sppnw41_jltgy   Done
+sppnw42_jltgy   Done
+sppnw43_jltgy   Done
+
+All instances done.
+
+Run #2. Pertubation function : perturbSolution30!
+sppaa03_jltgy   Done
+sppaa05_jltgy   Done
+sppnw01_jltgy   Done
+sppnw03_jltgy   Done
+sppnw04_jltgy   Done
+sppnw05_jltgy   Done
+sppnw06_jltgy   Done
+sppnw07_jltgy   Done
+sppnw08_jltgy   Done
+sppnw09_jltgy   Done
+sppnw10_jltgy   Done
+sppnw11_jltgy   Done
+sppnw12_jltgy   Done
+sppnw13_jltgy   Done
+sppnw14_jltgy   Done
+sppnw15_jltgy   Done
+sppnw16_jltgy   Done
+sppnw17_jltgy   Done
+sppnw18_jltgy   Done
+sppnw19_jltgy   Done
+sppnw20_jltgy   Done
+sppnw21_jltgy   Done
+sppnw22_jltgy   Done
+sppnw23_jltgy   Done
+sppnw24_jltgy   Done
+sppnw25_jltgy   Done
+sppnw26_jltgy   Done
+sppnw27_jltgy   Done
+sppnw28_jltgy   Done
+sppnw29_jltgy   Done
+sppnw30_jltgy   Done
+sppnw31_jltgy   Done
+sppnw32_jltgy   Done
+sppnw33_jltgy   Done
+sppnw34_jltgy   Done
+sppnw35_jltgy   Done
+sppnw36_jltgy   Done
+sppnw37_jltgy   Done
+sppnw38_jltgy   Done
+sppnw39_jltgy   Done
+sppnw40_jltgy   Done
+sppnw41_jltgy   Done
+sppnw42_jltgy   Done
+sppnw43_jltgy   Done
+
+All instances done.
+
+Run #2. Pertubation function : perturbSolution28a!
+sppaa03_jltgy   Done
+sppaa05_jltgy   Done
+sppnw01_jltgy   Done
+sppnw03_jltgy   Done
+sppnw04_jltgy   Done
+sppnw05_jltgy   Done
+sppnw06_jltgy   Done
+sppnw07_jltgy   Done
+sppnw08_jltgy   Done
+sppnw09_jltgy   Done
+sppnw10_jltgy   Done
+sppnw11_jltgy   Done
+sppnw12_jltgy   Done
+sppnw13_jltgy   Done
+sppnw14_jltgy   Done
+sppnw15_jltgy   Done
+sppnw16_jltgy   Done
+sppnw17_jltgy   Done
+sppnw18_jltgy   Done
+sppnw19_jltgy   Done
+sppnw20_jltgy   Done
+sppnw21_jltgy   Done
+sppnw22_jltgy   Done
+sppnw23_jltgy   Done
+sppnw24_jltgy   Done
+sppnw25_jltgy   Done
+sppnw26_jltgy   Done
+sppnw27_jltgy   Done
+sppnw28_jltgy   Done
+sppnw29_jltgy   Done
+sppnw30_jltgy   Done
+sppnw31_jltgy   Done
+sppnw32_jltgy   Done
+sppnw33_jltgy   Done
+sppnw34_jltgy   Done
+sppnw35_jltgy   Done
+sppnw36_jltgy   Done
+sppnw37_jltgy   Done
+sppnw38_jltgy   Done
+sppnw39_jltgy   Done
+sppnw40_jltgy   Done
+sppnw41_jltgy   Done
+sppnw42_jltgy   Done
+sppnw43_jltgy   Done
+
+All instances done.
+
+Exporting run to CSV...
+
+Done
+
+Run #3. Pertubation function : perturbSolution!
+sppaa03_vOavI   Done
+sppaa05_vOavI   Done
+sppnw01_vOavI   Done
+sppnw03_vOavI   Done
+sppnw04_vOavI   Done
+sppnw05_vOavI   Done
+sppnw06_vOavI   Done
+sppnw07_vOavI   Done
+sppnw08_vOavI   Done
+sppnw09_vOavI   Done
+sppnw10_vOavI   Done
+sppnw11_vOavI   Done
+sppnw12_vOavI   Done
+sppnw13_vOavI   Done
+sppnw14_vOavI   Done
+sppnw15_vOavI   Done
+sppnw16_vOavI   Done
+sppnw17_vOavI   Done
+sppnw18_vOavI   Done
+sppnw19_vOavI   Done
+sppnw20_vOavI   Done
+sppnw21_vOavI   Done
+sppnw22_vOavI   Done
+sppnw23_vOavI   Done
+sppnw24_vOavI   Done
+sppnw25_vOavI   Done
+sppnw26_vOavI   Done
+sppnw27_vOavI   Done
+sppnw28_vOavI   Done
+sppnw29_vOavI   Done
+sppnw30_vOavI   Done
+sppnw31_vOavI   Done
+sppnw32_vOavI   Done
+sppnw33_vOavI   Done
+sppnw34_vOavI   Done
+sppnw35_vOavI   Done
+sppnw36_vOavI   Done
+sppnw37_vOavI   Done
+sppnw38_vOavI   Done
+sppnw39_vOavI   Done
+sppnw40_vOavI   Done
+sppnw41_vOavI   Done
+sppnw42_vOavI   Done
+sppnw43_vOavI   Done
+
+All instances done.
+
+Run #3. Pertubation function : perturbSolution30!
+sppaa03_vOavI   Done
+sppaa05_vOavI   Done
+sppnw01_vOavI   Done
+sppnw03_vOavI   Done
+sppnw04_vOavI   Done
+sppnw05_vOavI   Done
+sppnw06_vOavI   Done
+sppnw07_vOavI   Done
+sppnw08_vOavI   Done
+sppnw09_vOavI   Done
+sppnw10_vOavI   Done
+sppnw11_vOavI   Done
+sppnw12_vOavI   Done
+sppnw13_vOavI   Done
+sppnw14_vOavI   Done
+sppnw15_vOavI   Done
+sppnw16_vOavI   Done
+sppnw17_vOavI   Done
+sppnw18_vOavI   Done
+sppnw19_vOavI   Done
+sppnw20_vOavI   Done
+sppnw21_vOavI   Done
+sppnw22_vOavI   Done
+sppnw23_vOavI   Done
+sppnw24_vOavI   Done
+sppnw25_vOavI   Done
+sppnw26_vOavI   Done
+sppnw27_vOavI   Done
+sppnw28_vOavI   Done
+sppnw29_vOavI   Done
+sppnw30_vOavI   Done
+sppnw31_vOavI   Done
+sppnw32_vOavI   Done
+sppnw33_vOavI   Done
+sppnw34_vOavI   Done
+sppnw35_vOavI   Done
+sppnw36_vOavI   Done
+sppnw37_vOavI   Done
+sppnw38_vOavI   Done
+sppnw39_vOavI   Done
+sppnw40_vOavI   Done
+sppnw41_vOavI   Done
+sppnw42_vOavI   Done
+sppnw43_vOavI   Done
+
+All instances done.
+
+Run #3. Pertubation function : perturbSolution28a!
+sppaa03_vOavI   Done
+sppaa05_vOavI   Done
+sppnw01_vOavI   Done
+sppnw03_vOavI   Done
+sppnw04_vOavI   Done
+sppnw05_vOavI   Done
+sppnw06_vOavI   Done
+sppnw07_vOavI   Done
+sppnw08_vOavI   Done
+sppnw09_vOavI   Done
+sppnw10_vOavI   Done
+sppnw11_vOavI   Done
+sppnw12_vOavI   Done
+sppnw13_vOavI   Done
+sppnw14_vOavI   Done
+sppnw15_vOavI   Done
+sppnw16_vOavI   Done
+sppnw17_vOavI   Done
+sppnw18_vOavI   Done
+sppnw19_vOavI   Done
+sppnw20_vOavI   Done
+sppnw21_vOavI   Done
+sppnw22_vOavI   Done
+sppnw23_vOavI   Done
+sppnw24_vOavI   Done
+sppnw25_vOavI   Done
+sppnw26_vOavI   Done
+sppnw27_vOavI   Done
+sppnw28_vOavI   Done
+sppnw29_vOavI   Done
+sppnw30_vOavI   Done
+sppnw31_vOavI   Done
+sppnw32_vOavI   Done
+sppnw33_vOavI   Done
+sppnw34_vOavI   Done
+sppnw35_vOavI   Done
+sppnw36_vOavI   Done
+sppnw37_vOavI   Done
+sppnw38_vOavI   Done
+sppnw39_vOavI   Done
+sppnw40_vOavI   Done
+sppnw41_vOavI   Done
+sppnw42_vOavI   Done
+sppnw43_vOavI   Done
+
+All instances done.
+
+Exporting run to CSV...
+
+Done
+
+Run #4. Pertubation function : perturbSolution!
+sppaa03_jP60W   Done
+sppaa05_jP60W   Done
+sppnw01_jP60W   Done
+sppnw03_jP60W   Done
+sppnw04_jP60W   Done
+sppnw05_jP60W   Done
+sppnw06_jP60W   Done
+sppnw07_jP60W   Done
+sppnw08_jP60W   Done
+sppnw09_jP60W   Done
+sppnw10_jP60W   Done
+sppnw11_jP60W   Done
+sppnw12_jP60W   Done
+sppnw13_jP60W   Done
+sppnw14_jP60W   Done
+sppnw15_jP60W   Done
+sppnw16_jP60W   Done
+sppnw17_jP60W   Done
+sppnw18_jP60W   Done
+sppnw19_jP60W   Done
+sppnw20_jP60W   Done
+sppnw21_jP60W   Done
+sppnw22_jP60W   Done
+sppnw23_jP60W   Done
+sppnw24_jP60W   Done
+sppnw25_jP60W   Done
+sppnw26_jP60W   Done
+sppnw27_jP60W   Done
+sppnw28_jP60W   Done
+sppnw29_jP60W   Done
+sppnw30_jP60W   Done
+sppnw31_jP60W   Done
+sppnw32_jP60W   Done
+sppnw33_jP60W   Done
+sppnw34_jP60W   Done
+sppnw35_jP60W   Done
+sppnw36_jP60W   Done
+sppnw37_jP60W   Done
+sppnw38_jP60W   Done
+sppnw39_jP60W   Done
+sppnw40_jP60W   Done
+sppnw41_jP60W   Done
+sppnw42_jP60W   Done
+sppnw43_jP60W   Done
+
+All instances done.
+
+Run #4. Pertubation function : perturbSolution30!
+sppaa03_jP60W   Done
+sppaa05_jP60W   Done
+sppnw01_jP60W   Done
+sppnw03_jP60W   Done
+sppnw04_jP60W   Done
+sppnw05_jP60W   Done
+sppnw06_jP60W   Done
+sppnw07_jP60W   Done
+sppnw08_jP60W   Done
+sppnw09_jP60W   Done
+sppnw10_jP60W   Done
+sppnw11_jP60W   Done
+sppnw12_jP60W   Done
+sppnw13_jP60W   Done
+sppnw14_jP60W   Done
+sppnw15_jP60W   Done
+sppnw16_jP60W   Done
+sppnw17_jP60W   Done
+sppnw18_jP60W   Done
+sppnw19_jP60W   Done
+sppnw20_jP60W   Done
+sppnw21_jP60W   Done
+sppnw22_jP60W   Done
+sppnw23_jP60W   Done
+sppnw24_jP60W   Done
+sppnw25_jP60W   Done
+sppnw26_jP60W   Done
+sppnw27_jP60W   Done
+sppnw28_jP60W   Done
+sppnw29_jP60W   Done
+sppnw30_jP60W   Done
+sppnw31_jP60W   Done
+sppnw32_jP60W   Done
+sppnw33_jP60W   Done
+sppnw34_jP60W   Done
+sppnw35_jP60W   Done
+sppnw36_jP60W   Done
+sppnw37_jP60W   Done
+sppnw38_jP60W   Done
+sppnw39_jP60W   Done
+sppnw40_jP60W   Done
+sppnw41_jP60W   Done
+sppnw42_jP60W   Done
+sppnw43_jP60W   Done
+
+All instances done.
+
+Run #4. Pertubation function : perturbSolution28a!
+sppaa03_jP60W   Done
+sppaa05_jP60W   Done
+sppnw01_jP60W   Done
+sppnw03_jP60W   Done
+sppnw04_jP60W   Done
+sppnw05_jP60W   Done
+sppnw06_jP60W   Done
+sppnw07_jP60W   Done
+sppnw08_jP60W   Done
+sppnw09_jP60W   Done
+sppnw10_jP60W   Done
+sppnw11_jP60W   Done
+sppnw12_jP60W   Done
+sppnw13_jP60W   Done
+sppnw14_jP60W   Done
+sppnw15_jP60W   Done
+sppnw16_jP60W   Done
+sppnw17_jP60W   Done
+sppnw18_jP60W   Done
+sppnw19_jP60W   Done
+sppnw20_jP60W   Done
+sppnw21_jP60W   Done
+sppnw22_jP60W   Done
+sppnw23_jP60W   Done
+sppnw24_jP60W   Done
+sppnw25_jP60W   Done
+sppnw26_jP60W   Done
+sppnw27_jP60W   Done
+sppnw28_jP60W   Done
+sppnw29_jP60W   Done
+sppnw30_jP60W   Done
+sppnw31_jP60W   Done
+sppnw32_jP60W   Done
+sppnw33_jP60W   Done
+sppnw34_jP60W   Done
+sppnw35_jP60W   Done
+sppnw36_jP60W   Done
+sppnw37_jP60W   Done
+sppnw38_jP60W   Done
+sppnw39_jP60W   Done
+sppnw40_jP60W   Done
+sppnw41_jP60W   Done
+sppnw42_jP60W   Done
+sppnw43_jP60W   Done
+
+All instances done.
+
+Exporting run to CSV...
+
+Done
+
+Run #5. Pertubation function : perturbSolution!
+sppaa03_OOatJ   Done
+sppaa05_OOatJ   Done
+sppnw01_OOatJ   Done
+sppnw03_OOatJ   Done
+sppnw04_OOatJ   Done
+sppnw05_OOatJ   Done
+sppnw06_OOatJ   Done
+sppnw07_OOatJ   Done
+sppnw08_OOatJ   Done
+sppnw09_OOatJ   Done
+sppnw10_OOatJ   Done
+sppnw11_OOatJ   Done
+sppnw12_OOatJ   Done
+sppnw13_OOatJ   Done
+sppnw14_OOatJ   Done
+sppnw15_OOatJ   Done
+sppnw16_OOatJ   Done
+sppnw17_OOatJ   Done
+sppnw18_OOatJ   Done
+sppnw19_OOatJ   Done
+sppnw20_OOatJ   Done
+sppnw21_OOatJ   Done
+sppnw22_OOatJ   Done
+sppnw23_OOatJ   Done
+sppnw24_OOatJ   Done
+sppnw25_OOatJ   Done
+sppnw26_OOatJ   Done
+sppnw27_OOatJ   Done
+sppnw28_OOatJ   Done
+sppnw29_OOatJ   Done
+sppnw30_OOatJ   Done
+sppnw31_OOatJ   Done
+sppnw32_OOatJ   Done
+sppnw33_OOatJ   Done
+sppnw34_OOatJ   Done
+sppnw35_OOatJ   Done
+sppnw36_OOatJ   Done
+sppnw37_OOatJ   Done
+sppnw38_OOatJ   Done
+sppnw39_OOatJ   Done
+sppnw40_OOatJ   Done
+sppnw41_OOatJ   Done
+sppnw42_OOatJ   Done
+sppnw43_OOatJ   Done
+
+All instances done.
+
+Run #5. Pertubation function : perturbSolution30!
+sppaa03_OOatJ   Done
+sppaa05_OOatJ   Done
+sppnw01_OOatJ   Done
+sppnw03_OOatJ   Done
+sppnw04_OOatJ   Done
+sppnw05_OOatJ   Done
+sppnw06_OOatJ   Done
+sppnw07_OOatJ   Done
+sppnw08_OOatJ   Done
+sppnw09_OOatJ   Done
+sppnw10_OOatJ   Done
+sppnw11_OOatJ   Done
+sppnw12_OOatJ   Done
+sppnw13_OOatJ   Done
+sppnw14_OOatJ   Done
+sppnw15_OOatJ   Done
+sppnw16_OOatJ   Done
+sppnw17_OOatJ   Done
+sppnw18_OOatJ   Done
+sppnw19_OOatJ   Done
+sppnw20_OOatJ   Done
+sppnw21_OOatJ   Done
+sppnw22_OOatJ   Done
+sppnw23_OOatJ   Done
+sppnw24_OOatJ   Done
+sppnw25_OOatJ   Done
+sppnw26_OOatJ   Done
+sppnw27_OOatJ   Done
+sppnw28_OOatJ   Done
+sppnw29_OOatJ   Done
+sppnw30_OOatJ   Done
+sppnw31_OOatJ   Done
+sppnw32_OOatJ   Done
+sppnw33_OOatJ   Done
+sppnw34_OOatJ   Done
+sppnw35_OOatJ   Done
+sppnw36_OOatJ   Done
+sppnw37_OOatJ   Done
+sppnw38_OOatJ   Done
+sppnw39_OOatJ   Done
+sppnw40_OOatJ   Done
+sppnw41_OOatJ   Done
+sppnw42_OOatJ   Done
+sppnw43_OOatJ   Done
+
+All instances done.
+
+Run #5. Pertubation function : perturbSolution28a!
+sppaa03_OOatJ   Done
+sppaa05_OOatJ   Done
+sppnw01_OOatJ   Done
+sppnw03_OOatJ   Done
+sppnw04_OOatJ   Done
+sppnw05_OOatJ   Done
+sppnw06_OOatJ   Done
+sppnw07_OOatJ   Done
+sppnw08_OOatJ   Done
+sppnw09_OOatJ   Done
+sppnw10_OOatJ   Done
+sppnw11_OOatJ   Done
+sppnw12_OOatJ   Done
+sppnw13_OOatJ   Done
+sppnw14_OOatJ   Done
+sppnw15_OOatJ   Done
+sppnw16_OOatJ   Done
+sppnw17_OOatJ   Done
+sppnw18_OOatJ   Done
+sppnw19_OOatJ   Done
+sppnw20_OOatJ   Done
+sppnw21_OOatJ   Done
+sppnw22_OOatJ   Done
+sppnw23_OOatJ   Done
+sppnw24_OOatJ   Done
+sppnw25_OOatJ   Done
+sppnw26_OOatJ   Done
+sppnw27_OOatJ   Done
+sppnw28_OOatJ   Done
+sppnw29_OOatJ   Done
+sppnw30_OOatJ   Done
+sppnw31_OOatJ   Done
+sppnw32_OOatJ   Done
+sppnw33_OOatJ   Done
+sppnw34_OOatJ   Done
+sppnw35_OOatJ   Done
+sppnw36_OOatJ   Done
+sppnw37_OOatJ   Done
+sppnw38_OOatJ   Done
+sppnw39_OOatJ   Done
+sppnw40_OOatJ   Done
+sppnw41_OOatJ   Done
+sppnw42_OOatJ   Done
+sppnw43_OOatJ   Done
+
+All instances done.
+
+Exporting run to CSV...
+
+Done
+
+Run #6. Pertubation function : perturbSolution!
+sppaa03_3JMWB   Done
+sppaa05_3JMWB   Done
+sppnw01_3JMWB   Done
+sppnw03_3JMWB   Done
+sppnw04_3JMWB   Done
+sppnw05_3JMWB   Done
+sppnw06_3JMWB   Done
+sppnw07_3JMWB   Done
+sppnw08_3JMWB   Done
+sppnw09_3JMWB   Done
+sppnw10_3JMWB   Done
+sppnw11_3JMWB   Done
+sppnw12_3JMWB   Done
+sppnw13_3JMWB   Done
+sppnw14_3JMWB   Done
+sppnw15_3JMWB   Done
+sppnw16_3JMWB   Done
+sppnw17_3JMWB   Done
+sppnw18_3JMWB   Done
+sppnw19_3JMWB   Done
+sppnw20_3JMWB   Done
+sppnw21_3JMWB   Done
+sppnw22_3JMWB   Done
+sppnw23_3JMWB   Done
+sppnw24_3JMWB   Done
+sppnw25_3JMWB   Done
+sppnw26_3JMWB   Done
+sppnw27_3JMWB   Done
+sppnw28_3JMWB   Done
+sppnw29_3JMWB   Done
+sppnw30_3JMWB   Done
+sppnw31_3JMWB   Done
+sppnw32_3JMWB   Done
+sppnw33_3JMWB   Done
+sppnw34_3JMWB   Done
+sppnw35_3JMWB   Done
+sppnw36_3JMWB   Done
+sppnw37_3JMWB   Done
+sppnw38_3JMWB   Done
+sppnw39_3JMWB   Done
+sppnw40_3JMWB   Done
+sppnw41_3JMWB   Done
+sppnw42_3JMWB   Done
+sppnw43_3JMWB   Done
+
+All instances done.
+
+Run #6. Pertubation function : perturbSolution30!
+sppaa03_3JMWB   Done
+sppaa05_3JMWB   Done
+sppnw01_3JMWB   Done
+sppnw03_3JMWB   Done
+sppnw04_3JMWB   Done
+sppnw05_3JMWB   Done
+sppnw06_3JMWB   Done
+sppnw07_3JMWB   Done
+sppnw08_3JMWB   Done
+sppnw09_3JMWB   Done
+sppnw10_3JMWB   Done
+sppnw11_3JMWB   Done
+sppnw12_3JMWB   Done
+sppnw13_3JMWB   Done
+sppnw14_3JMWB   Done
+sppnw15_3JMWB   Done
+sppnw16_3JMWB   Done
+sppnw17_3JMWB   Done
+sppnw18_3JMWB   Done
+sppnw19_3JMWB   Done
+sppnw20_3JMWB   Done
+sppnw21_3JMWB   Done
+sppnw22_3JMWB   Done
+sppnw23_3JMWB   Done
+sppnw24_3JMWB   Done
+sppnw25_3JMWB   Done
+sppnw26_3JMWB   Done
+sppnw27_3JMWB   Done
+sppnw28_3JMWB   Done
+sppnw29_3JMWB   Done
+sppnw30_3JMWB   Done
+sppnw31_3JMWB   Done
+sppnw32_3JMWB   Done
+sppnw33_3JMWB   Done
+sppnw34_3JMWB   Done
+sppnw35_3JMWB   Done
+sppnw36_3JMWB   Done
+sppnw37_3JMWB   Done
+sppnw38_3JMWB   Done
+sppnw39_3JMWB   Done
+sppnw40_3JMWB   Done
+sppnw41_3JMWB   Done
+sppnw42_3JMWB   Done
+sppnw43_3JMWB   Done
+
+All instances done.
+
+Run #6. Pertubation function : perturbSolution28a!
+sppaa03_3JMWB   Done
+sppaa05_3JMWB   Done
+sppnw01_3JMWB   Done
+sppnw03_3JMWB   Done
+sppnw04_3JMWB   Done
+sppnw05_3JMWB   Done
+sppnw06_3JMWB   Done
+sppnw07_3JMWB   Done
+sppnw08_3JMWB   Done
+sppnw09_3JMWB   Done
+sppnw10_3JMWB   Done
+sppnw11_3JMWB   Done
+sppnw12_3JMWB   Done
+sppnw13_3JMWB   Done
+sppnw14_3JMWB   Done
+sppnw15_3JMWB   Done
+sppnw16_3JMWB   Done
+sppnw17_3JMWB   Done
+sppnw18_3JMWB   Done
+sppnw19_3JMWB   Done
+sppnw20_3JMWB   Done
+sppnw21_3JMWB   Done
+sppnw22_3JMWB   Done
+sppnw23_3JMWB   Done
+sppnw24_3JMWB   Done
+sppnw25_3JMWB   Done
+sppnw26_3JMWB   Done
+sppnw27_3JMWB   Done
+sppnw28_3JMWB   Done
+sppnw29_3JMWB   Done
+sppnw30_3JMWB   Done
+sppnw31_3JMWB   Done
+sppnw32_3JMWB   Done
+sppnw33_3JMWB   Done
+sppnw34_3JMWB   Done
+sppnw35_3JMWB   Done
+sppnw36_3JMWB   Done
+sppnw37_3JMWB   Done
+sppnw38_3JMWB   Done
+sppnw39_3JMWB   Done
+sppnw40_3JMWB   Done
+sppnw41_3JMWB   Done
+sppnw42_3JMWB   Done
+sppnw43_3JMWB   Done
+
+All instances done.
+
+Exporting run to CSV...
+
+Done
+
+Run #7. Pertubation function : perturbSolution!
+sppaa03_5Lux7   Done
+sppaa05_5Lux7   Done
+sppnw01_5Lux7   Done
+sppnw03_5Lux7   Done
+sppnw04_5Lux7   Done
+sppnw05_5Lux7   Done
+sppnw06_5Lux7   Done
+sppnw07_5Lux7   Done
+sppnw08_5Lux7   Done
+sppnw09_5Lux7   Done
+sppnw10_5Lux7   Done
+sppnw11_5Lux7   Done
+sppnw12_5Lux7   Done
+sppnw13_5Lux7   Done
+sppnw14_5Lux7   Done
+sppnw15_5Lux7   Done
+sppnw16_5Lux7   Done
+sppnw17_5Lux7   Done
+sppnw18_5Lux7   Done
+sppnw19_5Lux7   Done
+sppnw20_5Lux7   Done
+sppnw21_5Lux7   Done
+sppnw22_5Lux7   Done
+sppnw23_5Lux7   Done
+sppnw24_5Lux7   Done
+sppnw25_5Lux7   Done
+sppnw26_5Lux7   Done
+sppnw27_5Lux7   Done
+sppnw28_5Lux7   Done
+sppnw29_5Lux7   Done
+sppnw30_5Lux7   Done
+sppnw31_5Lux7   Done
+sppnw32_5Lux7   Done
+sppnw33_5Lux7   Done
+sppnw34_5Lux7   Done
+sppnw35_5Lux7   Done
+sppnw36_5Lux7   Done
+sppnw37_5Lux7   Done
+sppnw38_5Lux7   Done
+sppnw39_5Lux7   Done
+sppnw40_5Lux7   Done
+sppnw41_5Lux7   Done
+sppnw42_5Lux7   Done
+sppnw43_5Lux7   Done
+
+All instances done.
+
+Run #7. Pertubation function : perturbSolution30!
+sppaa03_5Lux7   Done
+sppaa05_5Lux7   Done
+sppnw01_5Lux7   Done
+sppnw03_5Lux7   Done
+sppnw04_5Lux7   Done
+sppnw05_5Lux7   Done
+sppnw06_5Lux7   Done
+sppnw07_5Lux7   Done
+sppnw08_5Lux7   Done
+sppnw09_5Lux7   Done
+sppnw10_5Lux7   Done
+sppnw11_5Lux7   Done
+sppnw12_5Lux7   Done
+sppnw13_5Lux7   Done
+sppnw14_5Lux7   Done
+sppnw15_5Lux7   Done
+sppnw16_5Lux7   Done
+sppnw17_5Lux7   Done
+sppnw18_5Lux7   Done
+sppnw19_5Lux7   Done
+sppnw20_5Lux7   Done
+sppnw21_5Lux7   Done
+sppnw22_5Lux7   Done
+sppnw23_5Lux7   Done
+sppnw24_5Lux7   Done
+sppnw25_5Lux7   Done
+sppnw26_5Lux7   Done
+sppnw27_5Lux7   Done
+sppnw28_5Lux7   Done
+sppnw29_5Lux7   Done
+sppnw30_5Lux7   Done
+sppnw31_5Lux7   Done
+sppnw32_5Lux7   Done
+sppnw33_5Lux7   Done
+sppnw34_5Lux7   Done
+sppnw35_5Lux7   Done
+sppnw36_5Lux7   Done
+sppnw37_5Lux7   Done
+sppnw38_5Lux7   Done
+sppnw39_5Lux7   Done
+sppnw40_5Lux7   Done
+sppnw41_5Lux7   Done
+sppnw42_5Lux7   Done
+sppnw43_5Lux7   Done
+
+All instances done.
+
+Run #7. Pertubation function : perturbSolution28a!
+sppaa03_5Lux7   Done
+sppaa05_5Lux7   Done
+sppnw01_5Lux7   Done
+sppnw03_5Lux7   Done
+sppnw04_5Lux7   Done
+sppnw05_5Lux7   Done
+sppnw06_5Lux7   Done
+sppnw07_5Lux7   Done
+sppnw08_5Lux7   Done
+sppnw09_5Lux7   Done
+sppnw10_5Lux7   Done
+sppnw11_5Lux7   Done
+sppnw12_5Lux7   Done
+sppnw13_5Lux7   Done
+sppnw14_5Lux7   Done
+sppnw15_5Lux7   Done
+sppnw16_5Lux7   Done
+sppnw17_5Lux7   Done
+sppnw18_5Lux7   Done
+sppnw19_5Lux7   Done
+sppnw20_5Lux7   Done
+sppnw21_5Lux7   Done
+sppnw22_5Lux7   Done
+sppnw23_5Lux7   Done
+sppnw24_5Lux7   Done
+sppnw25_5Lux7   Done
+sppnw26_5Lux7   Done
+sppnw27_5Lux7   Done
+sppnw28_5Lux7   Done
+sppnw29_5Lux7   Done
+sppnw30_5Lux7   Done
+sppnw31_5Lux7   Done
+sppnw32_5Lux7   Done
+sppnw33_5Lux7   Done
+sppnw34_5Lux7   Done
+sppnw35_5Lux7   Done
+sppnw36_5Lux7   Done
+sppnw37_5Lux7   Done
+sppnw38_5Lux7   Done
+sppnw39_5Lux7   Done
+sppnw40_5Lux7   Done
+sppnw41_5Lux7   Done
+sppnw42_5Lux7   Done
+sppnw43_5Lux7   Done
+
+All instances done.
+
+Exporting run to CSV...
+
+Done
+
+Run #8. Pertubation function : perturbSolution!
+sppaa03_b4eBQ   Done
+sppaa05_b4eBQ   Done
+sppnw01_b4eBQ   Done
+sppnw03_b4eBQ   Done
+sppnw04_b4eBQ   Done
+sppnw05_b4eBQ   Done
+sppnw06_b4eBQ   Done
+sppnw07_b4eBQ   Done
+sppnw08_b4eBQ   Done
+sppnw09_b4eBQ   Done
+sppnw10_b4eBQ   Done
+sppnw11_b4eBQ   Done
+sppnw12_b4eBQ   Done
+sppnw13_b4eBQ   Done
+sppnw14_b4eBQ   Done
+sppnw15_b4eBQ   Done
+sppnw16_b4eBQ   Done
+sppnw17_b4eBQ   Done
+sppnw18_b4eBQ   Done
+sppnw19_b4eBQ   Done
+sppnw20_b4eBQ   Done
+sppnw21_b4eBQ   Done
+sppnw22_b4eBQ   Done
+sppnw23_b4eBQ   Done
+sppnw24_b4eBQ   Done
+sppnw25_b4eBQ   Done
+sppnw26_b4eBQ   Done
+sppnw27_b4eBQ   Done
+sppnw28_b4eBQ   Done
+sppnw29_b4eBQ   Done
+sppnw30_b4eBQ   Done
+sppnw31_b4eBQ   Done
+sppnw32_b4eBQ   Done
+sppnw33_b4eBQ   Done
+sppnw34_b4eBQ   Done
+sppnw35_b4eBQ   Done
+sppnw36_b4eBQ   Done
+sppnw37_b4eBQ   Done
+sppnw38_b4eBQ   Done
+sppnw39_b4eBQ   Done
+sppnw40_b4eBQ   Done
+sppnw41_b4eBQ   Done
+sppnw42_b4eBQ   Done
+sppnw43_b4eBQ   Done
+
+All instances done.
+
+Run #8. Pertubation function : perturbSolution30!
+sppaa03_b4eBQ   Done
+sppaa05_b4eBQ   Done
+sppnw01_b4eBQ   Done
+sppnw03_b4eBQ   Done
+sppnw04_b4eBQ   Done
+sppnw05_b4eBQ   Done
+sppnw06_b4eBQ   Done
+sppnw07_b4eBQ   Done
+sppnw08_b4eBQ   Done
+sppnw09_b4eBQ   Done
+sppnw10_b4eBQ   Done
+sppnw11_b4eBQ   Done
+sppnw12_b4eBQ   Done
+sppnw13_b4eBQ   Done
+sppnw14_b4eBQ   Done
+sppnw15_b4eBQ   Done
+sppnw16_b4eBQ   Done
+sppnw17_b4eBQ   Done
+sppnw18_b4eBQ   Done
+sppnw19_b4eBQ   Done
+sppnw20_b4eBQ   Done
+sppnw21_b4eBQ   Done
+sppnw22_b4eBQ   Done
+sppnw23_b4eBQ   Done
+sppnw24_b4eBQ   Done
+sppnw25_b4eBQ   Done
+sppnw26_b4eBQ   Done
+sppnw27_b4eBQ   Done
+sppnw28_b4eBQ   Done
+sppnw29_b4eBQ   Done
+sppnw30_b4eBQ   Done
+sppnw31_b4eBQ   Done
+sppnw32_b4eBQ   Done
+sppnw33_b4eBQ   Done
+sppnw34_b4eBQ   Done
+sppnw35_b4eBQ   Done
+sppnw36_b4eBQ   Done
+sppnw37_b4eBQ   Done
+sppnw38_b4eBQ   Done
+sppnw39_b4eBQ   Done
+sppnw40_b4eBQ   Done
+sppnw41_b4eBQ   Done
+sppnw42_b4eBQ   Done
+sppnw43_b4eBQ   Done
+
+All instances done.
+
+Run #8. Pertubation function : perturbSolution28a!
+sppaa03_b4eBQ   Done
+sppaa05_b4eBQ   Done
+sppnw01_b4eBQ   Done
+sppnw03_b4eBQ   Done
+sppnw04_b4eBQ   Done
+sppnw05_b4eBQ   Done
+sppnw06_b4eBQ   Done
+sppnw07_b4eBQ   Done
+sppnw08_b4eBQ   Done
+sppnw09_b4eBQ   Done
+sppnw10_b4eBQ   Done
+sppnw11_b4eBQ   Done
+sppnw12_b4eBQ   Done
+sppnw13_b4eBQ   Done
+sppnw14_b4eBQ   Done
+sppnw15_b4eBQ   Done
+sppnw16_b4eBQ   Done
+sppnw17_b4eBQ   Done
+sppnw18_b4eBQ   Done
+sppnw19_b4eBQ   Done
+sppnw20_b4eBQ   Done
+sppnw21_b4eBQ   Done
+sppnw22_b4eBQ   Done
+sppnw23_b4eBQ   Done
+sppnw24_b4eBQ   Done
+sppnw25_b4eBQ   Done
+sppnw26_b4eBQ   Done
+sppnw27_b4eBQ   Done
+sppnw28_b4eBQ   Done
+sppnw29_b4eBQ   Done
+sppnw30_b4eBQ   Done
+sppnw31_b4eBQ   Done
+sppnw32_b4eBQ   Done
+sppnw33_b4eBQ   Done
+sppnw34_b4eBQ   Done
+sppnw35_b4eBQ   Done
+sppnw36_b4eBQ   Done
+sppnw37_b4eBQ   Done
+sppnw38_b4eBQ   Done
+sppnw39_b4eBQ   Done
+sppnw40_b4eBQ   Done
+sppnw41_b4eBQ   Done
+sppnw42_b4eBQ   Done
+sppnw43_b4eBQ   Done
+
+All instances done.
+
+Exporting run to CSV...
+
+Done
+
+Run #9. Pertubation function : perturbSolution!
+sppaa03_xKjgF   Done
+sppaa05_xKjgF   Done
+sppnw01_xKjgF   Done
+sppnw03_xKjgF   Done
+sppnw04_xKjgF   Done
+sppnw05_xKjgF   Done
+sppnw06_xKjgF   Done
+sppnw07_xKjgF   Done
+sppnw08_xKjgF   Done
+sppnw09_xKjgF   Done
+sppnw10_xKjgF   Done
+sppnw11_xKjgF   Done
+sppnw12_xKjgF   Done
+sppnw13_xKjgF   Done
+sppnw14_xKjgF   Done
+sppnw15_xKjgF   Done
+sppnw16_xKjgF   Done
+sppnw17_xKjgF   Done
+sppnw18_xKjgF   Done
+sppnw19_xKjgF   Done
+sppnw20_xKjgF   Done
+sppnw21_xKjgF   Done
+sppnw22_xKjgF   Done
+sppnw23_xKjgF   Done
+sppnw24_xKjgF   Done
+sppnw25_xKjgF   Done
+sppnw26_xKjgF   Done
+sppnw27_xKjgF   Done
+sppnw28_xKjgF   Done
+sppnw29_xKjgF   Done
+sppnw30_xKjgF   Done
+sppnw31_xKjgF   Done
+sppnw32_xKjgF   Done
+sppnw33_xKjgF   Done
+sppnw34_xKjgF   Done
+sppnw35_xKjgF   Done
+sppnw36_xKjgF   Done
+sppnw37_xKjgF   Done
+sppnw38_xKjgF   Done
+sppnw39_xKjgF   Done
+sppnw40_xKjgF   Done
+sppnw41_xKjgF   Done
+sppnw42_xKjgF   Done
+sppnw43_xKjgF   Done
+
+All instances done.
+
+Run #9. Pertubation function : perturbSolution30!
+sppaa03_xKjgF   Done
+sppaa05_xKjgF   Done
+sppnw01_xKjgF   Done
+sppnw03_xKjgF   Done
+sppnw04_xKjgF   Done
+sppnw05_xKjgF   Done
+sppnw06_xKjgF   Done
+sppnw07_xKjgF   Done
+sppnw08_xKjgF   Done
+sppnw09_xKjgF   Done
+sppnw10_xKjgF   Done
+sppnw11_xKjgF   Done
+sppnw12_xKjgF   Done
+sppnw13_xKjgF   Done
+sppnw14_xKjgF   Done
+sppnw15_xKjgF   Done
+sppnw16_xKjgF   Done
+sppnw17_xKjgF   Done
+sppnw18_xKjgF   Done
+sppnw19_xKjgF   Done
+sppnw20_xKjgF   Done
+sppnw21_xKjgF   Done
+sppnw22_xKjgF   Done
+sppnw23_xKjgF   Done
+sppnw24_xKjgF   Done
+sppnw25_xKjgF   Done
+sppnw26_xKjgF   Done
+sppnw27_xKjgF   Done
+sppnw28_xKjgF   Done
+sppnw29_xKjgF   Done
+sppnw30_xKjgF   Done
+sppnw31_xKjgF   Done
+sppnw32_xKjgF   Done
+sppnw33_xKjgF   Done
+sppnw34_xKjgF   Done
+sppnw35_xKjgF   Done
+sppnw36_xKjgF   Done
+sppnw37_xKjgF   Done
+sppnw38_xKjgF   Done
+sppnw39_xKjgF   Done
+sppnw40_xKjgF   Done
+sppnw41_xKjgF   Done
+sppnw42_xKjgF   Done
+sppnw43_xKjgF   Done
+
+All instances done.
+
+Run #9. Pertubation function : perturbSolution28a!
+sppaa03_xKjgF   Done
+sppaa05_xKjgF   Done
+sppnw01_xKjgF   Done
+sppnw03_xKjgF   Done
+sppnw04_xKjgF   Done
+sppnw05_xKjgF   Done
+sppnw06_xKjgF   Done
+sppnw07_xKjgF   Done
+sppnw08_xKjgF   Done
+sppnw09_xKjgF   Done
+sppnw10_xKjgF   Done
+sppnw11_xKjgF   Done
+sppnw12_xKjgF   Done
+sppnw13_xKjgF   Done
+sppnw14_xKjgF   Done
+sppnw15_xKjgF   Done
+sppnw16_xKjgF   Done
+sppnw17_xKjgF   Done
+sppnw18_xKjgF   Done
+sppnw19_xKjgF   Done
+sppnw20_xKjgF   Done
+sppnw21_xKjgF   Done
+sppnw22_xKjgF   Done
+sppnw23_xKjgF   Done
+sppnw24_xKjgF   Done
+sppnw25_xKjgF   Done
+sppnw26_xKjgF   Done
+sppnw27_xKjgF   Done
+sppnw28_xKjgF   Done
+sppnw29_xKjgF   Done
+sppnw30_xKjgF   Done
+sppnw31_xKjgF   Done
+sppnw32_xKjgF   Done
+sppnw33_xKjgF   Done
+sppnw34_xKjgF   Done
+sppnw35_xKjgF   Done
+sppnw36_xKjgF   Done
+sppnw37_xKjgF   Done
+sppnw38_xKjgF   Done
+sppnw39_xKjgF   Done
+sppnw40_xKjgF   Done
+sppnw41_xKjgF   Done
+sppnw42_xKjgF   Done
+sppnw43_xKjgF   Done
+
+All instances done.
+
+Exporting run to CSV...
+
+Done
+
+Run #10. Pertubation function : perturbSolution!
+sppaa03_bFxp5   Done
+sppaa05_bFxp5   Done
+sppnw01_bFxp5   Done
+sppnw03_bFxp5   Done
+sppnw04_bFxp5   Done
+sppnw05_bFxp5   Done
+sppnw06_bFxp5   Done
+sppnw07_bFxp5   Done
+sppnw08_bFxp5   Done
+sppnw09_bFxp5   Done
+sppnw10_bFxp5   Done
+sppnw11_bFxp5   Done
+sppnw12_bFxp5   Done
+sppnw13_bFxp5   Done
+sppnw14_bFxp5   Done
+sppnw15_bFxp5   Done
+sppnw16_bFxp5   Done
+sppnw17_bFxp5   Done
+sppnw18_bFxp5   Done
+sppnw19_bFxp5   Done
+sppnw20_bFxp5   Done
+sppnw21_bFxp5   Done
+sppnw22_bFxp5   Done
+sppnw23_bFxp5   Done
+sppnw24_bFxp5   Done
+sppnw25_bFxp5   Done
+sppnw26_bFxp5   Done
+sppnw27_bFxp5   Done
+sppnw28_bFxp5   Done
+sppnw29_bFxp5   Done
+sppnw30_bFxp5   Done
+sppnw31_bFxp5   Done
+sppnw32_bFxp5   Done
+sppnw33_bFxp5   Done
+sppnw34_bFxp5   Done
+sppnw35_bFxp5   Done
+sppnw36_bFxp5   Done
+sppnw37_bFxp5   Done
+sppnw38_bFxp5   Done
+sppnw39_bFxp5   Done
+sppnw40_bFxp5   Done
+sppnw41_bFxp5   Done
+sppnw42_bFxp5   Done
+sppnw43_bFxp5   Done
+
+All instances done.
+
+Run #10. Pertubation function : perturbSolution30!
+sppaa03_bFxp5   Done
+sppaa05_bFxp5   Done
+sppnw01_bFxp5   Done
+sppnw03_bFxp5   Done
+sppnw04_bFxp5   Done
+sppnw05_bFxp5   Done
+sppnw06_bFxp5   Done
+sppnw07_bFxp5   Done
+sppnw08_bFxp5   Done
+sppnw09_bFxp5   Done
+sppnw10_bFxp5   Done
+sppnw11_bFxp5   Done
+sppnw12_bFxp5   Done
+sppnw13_bFxp5   Done
+sppnw14_bFxp5   Done
+sppnw15_bFxp5   Done
+sppnw16_bFxp5   Done
+sppnw17_bFxp5   Done
+sppnw18_bFxp5   Done
+sppnw19_bFxp5   Done
+sppnw20_bFxp5   Done
+sppnw21_bFxp5   Done
+sppnw22_bFxp5   Done
+sppnw23_bFxp5   Done
+sppnw24_bFxp5   Done
+sppnw25_bFxp5   Done
+sppnw26_bFxp5   Done
+sppnw27_bFxp5   Done
+sppnw28_bFxp5   Done
+sppnw29_bFxp5   Done
+sppnw30_bFxp5   Done
+sppnw31_bFxp5   Done
+sppnw32_bFxp5   Done
+sppnw33_bFxp5   Done
+sppnw34_bFxp5   Done
+sppnw35_bFxp5   Done
+sppnw36_bFxp5   Done
+sppnw37_bFxp5   Done
+sppnw38_bFxp5   Done
+sppnw39_bFxp5   Done
+sppnw40_bFxp5   Done
+sppnw41_bFxp5   Done
+sppnw42_bFxp5   Done
+sppnw43_bFxp5   Done
+
+All instances done.
+
+Run #10. Pertubation function : perturbSolution28a!
+sppaa03_bFxp5   Done
+sppaa05_bFxp5   Done
+sppnw01_bFxp5   Done
+sppnw03_bFxp5   Done
+sppnw04_bFxp5   Done
+sppnw05_bFxp5   Done
+sppnw06_bFxp5   Done
+sppnw07_bFxp5   Done
+sppnw08_bFxp5   Done
+sppnw09_bFxp5   Done
+sppnw10_bFxp5   Done
+sppnw11_bFxp5   Done
+sppnw12_bFxp5   Done
+sppnw13_bFxp5   Done
+sppnw14_bFxp5   Done
+sppnw15_bFxp5   Done
+sppnw16_bFxp5   Done
+sppnw17_bFxp5   Done
+sppnw18_bFxp5   Done
+sppnw19_bFxp5   Done
+sppnw20_bFxp5   Done
+sppnw21_bFxp5   Done
+sppnw22_bFxp5   Done
+sppnw23_bFxp5   Done
+sppnw24_bFxp5   Done
+sppnw25_bFxp5   Done
+sppnw26_bFxp5   Done
+sppnw27_bFxp5   Done
+sppnw28_bFxp5   Done
+sppnw29_bFxp5   Done
+sppnw30_bFxp5   Done
+sppnw31_bFxp5   Done
+sppnw32_bFxp5   Done
+sppnw33_bFxp5   Done
+sppnw34_bFxp5   Done
+sppnw35_bFxp5   Done
+sppnw36_bFxp5   Done
+sppnw37_bFxp5   Done
+sppnw38_bFxp5   Done
+sppnw39_bFxp5   Done
+sppnw40_bFxp5   Done
+sppnw41_bFxp5   Done
+sppnw42_bFxp5   Done
+sppnw43_bFxp5   Done
+
+All instances done.
+
+Exporting run to CSV...
+
+Done
+
+
+All runs done.
+
+Exporting run to CSV...
+
+Done
+31565.663345 seconds (59.37 G allocations: 5.527 TiB, 1.57% gc time, 0.01% compilation time)
+

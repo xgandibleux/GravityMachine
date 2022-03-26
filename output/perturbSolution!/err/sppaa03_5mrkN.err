@@ -1,0 +1,3 @@
+┌ Warning: `vendor()` is deprecated, use `BLAS.get_config()` and inspect the output instead
+│   caller = npyinitialize() at numpy.jl:67
+└ @ PyCall ~/.julia/packages/PyCall/L0fLP/src/numpy.jl:67

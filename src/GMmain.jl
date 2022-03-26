@@ -7,7 +7,7 @@ const verbose = true
 const graphic = true
 
 println("-) Active les packages requis\n")
-using JuMP, GLPK, PyPlot, Printf, Random
+using JuMP, GLPK, PyPlot, Printf, Random, DataStructures, DataFrames, CSV
 verbose ? println("  Fait \n") : nothing
 
 generateurVisualise = -1
@@ -336,26 +336,26 @@ function calculerDirections2(L::Vector{tSolution{Float64}}, vg::Vector{tGenerate
         @printf("  xm= %7.2f   ym= %7.2f ",xm,ym)
         @printf("  Δx= %8.2f    Δy= %8.2f ",Δx,Δy)
         @printf("  λ1= %6.5f    λ2= %6.5f \n",λ1[k],λ2[k])
-        if generateurVisualise == -1 
+        if generateurVisualise == -1
             # affichage pour tous les generateurs
             plot(n1, n2, xm, ym, linestyle="-", color="blue", marker="+")
             annotate("",
                      xy=[xm;ym],# Arrow tip
                      xytext=[n1;n2], # Text offset from tip
-                     arrowprops=Dict("arrowstyle"=>"->"))        
+                     arrowprops=Dict("arrowstyle"=>"->"))
         elseif generateurVisualise == k
             # affichage seulement pour le generateur k
             plot(n1, n2, xm, ym, linestyle="-", color="blue", marker="+")
             annotate("",
                      xy=[xm;ym],# Arrow tip
                      xytext=[n1;n2], # Text offset from tip
-                     arrowprops=Dict("arrowstyle"=>"->"))        
-        end 
+                     arrowprops=Dict("arrowstyle"=>"->"))
+        end
         #println("")
     end
     return λ1, λ2
 end
- 
+
 
 # ==============================================================================
 # point d'entree principal
@@ -364,12 +364,19 @@ function GM( fname::String,
              tailleSampling::Int64,
              maxTrial::Int64,
              maxTime::Int64
+             ;
+             figpath::String = "",
+             perturbSol::Function = perturbSolution30!,
+             csvdict::OrderedDict{String, Vector{Any}} = OrderedDict{String, Vector{Any}}()
            )
 
     @assert tailleSampling>=3 "Erreur : Au moins 3 sont requis"
 
     @printf("0) instance et parametres \n\n")
     verbose ? println("  instance = $fname | tailleSampling = $tailleSampling | maxTrial = $maxTrial | maxTime = $maxTime\n\n") : nothing
+
+    # compteur nombre de cycle # -----------------------------------------------
+    nbCycle = 0
 
     # chargement de l'instance numerique ---------------------------------------
     c1, c2, A = loadInstance2SPA(fname) # instance numerique de SPA
@@ -424,8 +431,8 @@ function GM( fname::String,
             ajouterXtilde!(vg, k, convert.(Int, vg[k].sRel.x), convert.(Int, L[k].y))
             vg[k].sFea   = true
             verbose ? @printf("→ Admissible \n") : nothing
-            # archive le point obtenu pour les besoins d'affichage    
-            if generateurVisualise == -1 
+            # archive le point obtenu pour les besoins d'affichage
+            if generateurVisualise == -1
                 # archivage pour tous les generateurs
                 push!(d.XFeas,vg[k].sInt.y[1])
                 push!(d.YFeas,vg[k].sInt.y[2])
@@ -433,7 +440,7 @@ function GM( fname::String,
                 # archivage seulement pour le generateur k
                 push!(d.XFeas,vg[k].sInt.y[1])
                 push!(d.YFeas,vg[k].sInt.y[2])
-            end 
+            end
         else
             vg[k].sFea   = false
             verbose ? @printf("→ x          \n") : nothing
@@ -496,9 +503,10 @@ function GM( fname::String,
                 # test detection cycle sur solutions entieres ------------------
                 cycle = [vg[k].sInt.y[1],vg[k].sInt.y[2]] in H
                 if (cycle == true)
+                    nbCycle = nbCycle + 1
                     println("CYCLE!!!!!!!!!!!!!!!")
                     # perturb solution
-                    perturbSolution30!(vg,k,c1,c2,d)
+                    perturbSol(vg,k,c1,c2,d)
                 end
                 push!(H,[vg[k].sInt.y[1],vg[k].sInt.y[2]])
 
@@ -521,6 +529,10 @@ function GM( fname::String,
 
     @printf("5) Extraction des resultats\n\n")
 
+    @printf("  Nombre de cycle : %d\n", nbCycle)
+    if length(csvdict) != 0
+        push!(csvdict["#C"], nbCycle)
+    end
 
     for k=1:nbgen
         verbose ? @printf("  %2d  : [ %8.2f , %8.2f ] ", k, vg[k].sInt.y[1],vg[k].sInt.y[2]) : nothing
@@ -541,7 +553,7 @@ function GM( fname::String,
 
 
     # ==========================================================================
-    @printf("6) Edition des resultats \n\n")
+    @printf("\n6) Edition des resultats \n\n")
 
 #    figure("Gravity Machine",figsize=(6.5,5))
     #xlim(25000,45000)
@@ -573,6 +585,13 @@ function GM( fname::String,
     X_EBP_frontiere, Y_EBP_frontiere, X_EBP, Y_EBP = ExtractEBP(d.XFeas, d.YFeas)
     plot(X_EBP_frontiere, Y_EBP_frontiere, color="green", markersize=3.0, marker="x")
     scatter(X_EBP, Y_EBP, color="green", s = 150, alpha = 0.3, label = L"y \in U")
+
+    nU = length(X_EBP)
+    verbose ? @printf("#U = %d\n", nU) : nothing
+    if length(csvdict) != 0
+        push!(csvdict["#U"], nU)
+    end
+
     @show X_EBP
     @show Y_EBP
 
@@ -590,20 +609,196 @@ function GM( fname::String,
     legend(bbox_to_anchor=[1,1], loc=0, borderaxespad=0, fontsize = "x-small")
     #PyPlot.title("Cone | 1 rounding | 2-$fname")
 
+    # Sauvegarde la figure
+    (figpath != "") ? savefig(figpath) : nothing
+
+    # Efface la figure pour que le prochain plot soit propre
+    (figpath != "") ? clf() : nothing
+
     # Compute the quality indicator of the bound set U generated ---------------
     # Need at least 2 points in EBP to compute the quality indicator
-    if length(X_EBP) > 1
+    # remainder : nU = length(X_EBP)
+    if nU > 1
         quality = qualityMeasure(XN,YN, X_EBP,Y_EBP)
         @printf("Quality measure: %5.2f %%\n", quality*100)
+        if length(csvdict) != 0
+            push!(csvdict["r (%)"], quality*100)
+        end
+    else
+        if length(csvdict) != 0
+            push!(csvdict["r (%)"], missing)
+        end
     end
 
 end
 
 # ==============================================================================
+# multi-instances in one run, the instances are took from "SPA/chosen_instances/"
+
+function GM_multi( tailleSampling::Int64,
+                   maxTrial::Int64,
+                   maxTime::Int64,
+                   nrun::Int64 = 1
+                   ;
+                   redirect::Bool = false,
+                   sameseed::Bool = false,
+                   prefix::String = "",
+                   perturbations::Vector{Function} = [perturbSolution30!]
+                 )
+    verbose ? println("Starting multi-instances run...\n") : nothing
+
+    instances_dir = "../SPA/chosen_instances"
+    filenames = getfname(instances_dir)
+
+    n = length(perturbations)
+    # Pour chaque perturbation, on stocke les données que l'on veut dans un
+    # dictionnaire
+    csvdata = Vector{OrderedDict{String, Vector{Any}}}(undef, n)
+
+    # DataFrame stockant les résultats de tous les runs (moyenne). Il est
+    # initialiser à la fin du premier run
+    DF = nothing
+    # On attribue une chaîne de 5 caractères à chaque run et
+    # on stocke chaque châine dans run_rndstr.
+    run_rndstr = Vector{String}(undef, nrun)
+
+    # les noms des instances sont stockés dans un dataframe
+    instancesnames = map(name -> split(name[4:end], ".")[1], filenames)
+    firstcolumn = DataFrame(Instances=instancesnames)
+    columnnames = nothing
+    numcolumnnames = nothing
+
+    # Première ligne personnalisée des futurs fichiers CSV
+    line = ""
+
+    # Si on redirige les résultats vers des fichiers, on n'affiche pas les
+    # plots (ioff)
+    redirect ? ioff() : nothing
+    for run in 1:nrun
+        run_rndstr[run] = randstring(5)
+
+        pertidx = 1
+        for perturbfunc in perturbations
+            # Make sure all the perturbations use the same random sequence
+            sameseed ? Random.seed!(run) : nothing
+
+            strperturb = string(perturbfunc)
+            # Run all instances with perturbfunc as pertubation
+            verbose ? @printf("Run #%d. Pertubation function : %s\n", run, strperturb) : nothing
+
+            csvdata[pertidx] = OrderedDict{String, Vector{Any}}()
+            initCSVdict!(csvdata[pertidx])
+            for i in 1:length(filenames)
+                instance = filenames[i][4:end]
+
+                instancename = instancesnames[i]
+                file = instancename * "_" * run_rndstr[run]
+                nprefix = prefix * "/" * strperturb * "/"
+                logpath = nprefix * "/log/" * file
+                errpath = nprefix * "/err/" * file
+                figpath = nprefix * "/fig/" * file
+
+                if redirect == true
+                    print(file)
+                    redirect_stdio(stdout=(logpath * ".log"), stderr=(errpath * ".err")) do
+                        t = @elapsed @time GM(instance,
+                                     tailleSampling,
+                                     maxTrial,
+                                     maxTime,
+                                     figpath=figpath * ".png",
+                                     perturbSol=perturbfunc,
+                                     csvdict=csvdata[pertidx]
+                                    )
+
+                        push!(csvdata[pertidx]["CPUt (s)"], t)
+                    end
+                    println("   Done")
+                else
+                    @time GM(instance, tailleSampling, maxTrial, maxTime)
+                end
+            end
+
+            pertidx = pertidx+1
+            verbose ? println("\nAll instances done.\n") : nothing
+        end
+        sameseed ? Random.seed!() : nothing
+
+        if run == 1
+            # Noms des colonnes numériques (e.g. #C, #U, r (%))
+            numcolumnnames = repeat(collect(keys(csvdata[1])), n)
+            # Noms des colonnes numériques mais avec la colonne Instances juste avant)
+            columnnames = vcat(["Instances"], numcolumnnames)
+
+            # On modifie la ligne personnalisée des futurs fichiers CSV
+            nentry = length(csvdata[1])
+            for perturbfunc in perturbations
+                line = line * "," * string(perturbfunc) * ","^(nentry-1)
+            end
+
+            # On enregistre les données collectées dans un DataFrame
+            df = DataFrame( vcat( map(d -> collect(values(d)), hcat(csvdata...))... ), :auto)
+            # On renomme les colonnes de ce DataFrame
+            rename!(df, numcolumnnames, makeunique=true)
+
+            # Puis on initialise le DataFrame moyenne
+            DF = deepcopy(df)
+        else
+            # On enregistre les données collectées dans un DataFrame
+            df = DataFrame( vcat( map(d -> collect(values(d)), hcat(csvdata...))... ), :auto)
+            # On renomme les colonnes de ce DataFrame
+            rename!(df, numcolumnnames, makeunique=true)
+
+            # On ajoute les valeurs du DataFrame au DataFrame moyenne
+            DF .= DF .+ df
+        end
+
+        verbose ? println("Exporting run to CSV...\n") : nothing
+        # On exporte le DataFrame df au format CSV
+        csvpath = prefix * "/csv/" * run_rndstr[run] * ".csv"
+        CSV.write(csvpath, hcat(firstcolumn, df), header=columnnames)
+        open(csvpath, "r") do io
+            wholetxt = read(io, String)
+        end
+        open(csvpath, "w") do io
+            write(io, line*"\n")
+            write(io, wholetxt)
+            write(io, line)
+        end
+        verbose ? println("Done\n") : nothing
+    end
+    # On réactive l'affichage normal des plots
+    redirect ? ion() : nothing
+    verbose ? println("\nAll runs done.\n") : nothing
+
+
+    verbose ? println("Exporting all runs average to CSV...\n") : nothing
+    #on exporte la moyenne de tous les dataframes
+    DF .= DF ./ nrun
+    csvpath = prefix * "/csv/" * join(run_rndstr) * ".csv"
+    CSV.write(csvpath, hcat(firstcolumn, DF), header=columnnames)
+    # ajout de la ligne personnalisée (ajout des noms des fonctions de
+    # perturbations)
+    wholetxt = ""
+    open(csvpath, "r") do io
+        wholetxt = read(io, String)
+    end
+    open(csvpath, "w") do io
+        write(io, line*"\n")
+        write(io, wholetxt)
+        write(io, line)
+    end
+    verbose ? println("Done") : nothing
+end
+
+P = [perturbSolution!, perturbSolution30!, perturbSolution28a!]
+@time GM_multi(10, 5, typemax(Int64), 10,
+               redirect = true,
+               prefix = "../output",
+               perturbations=P)
 
 #@time GM("sppaa02.txt", 6, 20, 20)
-#@time GM("sppnw03.txt", 6, 20, 20) #pb glpk
+#@time GM("sppnw03.txt", 6, 20, 20)
 #@time GM("sppnw10.txt", 6, 20, 20)
-@time GM("didactic5.txt", 5, 5, 10)
+#@time GM("didactic5.txt", 5, 5, 10)
 #@time GM("sppnw29.txt", 6, 30, 20)
 nothing

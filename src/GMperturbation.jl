@@ -36,8 +36,8 @@ function perturbSolution!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c
     end
     @printf("  %2dC : [ %8.2f , %8.2f ] \n", k, vg[k].sInt.y[1], vg[k].sInt.y[2])
 
-    # archive le point obtenu pour les besoins d'affichage    
-    if generateurVisualise == -1 
+    # archive le point obtenu pour les besoins d'affichage
+    if generateurVisualise == -1
         # archivage pour tous les generateurs
         push!(d.XPert,vg[k].sInt.y[1])
         push!(d.YPert,vg[k].sInt.y[2])
@@ -45,7 +45,7 @@ function perturbSolution!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c
         # archivage seulement pour le generateur k
         push!(d.XPert,vg[k].sInt.y[1])
         push!(d.YPert,vg[k].sInt.y[2])
-    end 
+    end
 #    @show vg[k].sInt.x
     return nothing
 end
@@ -93,8 +93,8 @@ end
 
     @printf("  %2dC : [ %8.2f , %8.2f ] \n", k, vg[k].sInt.y[1], vg[k].sInt.y[2])
 
-    # archive le point obtenu pour les besoins d'affichage    
-    if generateurVisualise == -1 
+    # archive le point obtenu pour les besoins d'affichage
+    if generateurVisualise == -1
         # archivage pour tous les generateurs
         push!(d.XPert,vg[k].sInt.y[1])
         push!(d.YPert,vg[k].sInt.y[2])
@@ -102,8 +102,66 @@ end
         # archivage seulement pour le generateur k
         push!(d.XPert,vg[k].sInt.y[1])
         push!(d.YPert,vg[k].sInt.y[2])
-    end     
+    end
 #    @show vg[k].sInt.x
 
     return nothing
 end
+
+function perturbSolution28a!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1}, d::tListDisplay)
+
+    # liste des candidats (valeur, indice) et tri decroissant
+    nbvar = length(vg[k].sInt.x)
+    #idxTilde0, idxTilde1 = split01(vg[k].sInt.x)
+
+#    candidats=[( abs( vg[k].sPrj.x[i] - vg[k].sInt.x[i] ) , i ) for i=1:nbvar if vg[k].sPrj.x[i]>0 && vg[k].sPrj.x[i]<1]
+    candidats=[( vg[k].sPrj.x[i] , i ) for i=1:nbvar if vg[k].sPrj.x[i]>0 && vg[k].sPrj.x[i]<1]
+#    sort!(candidats, rev=true, by = x -> x[1])
+
+
+#@show vg[k].sPrj.x
+#@show vg[k].sInt.x
+#@show candidats
+#@show nbvar
+
+    seq = randperm(length(candidats)) # melange les candidats afin d'avoir une composante variee
+
+    for i = 1:length(candidats)
+        j=candidats[seq[i]][2]
+        dFrom0 = candidats[seq[i]][1]
+        #@show candidats[seq[i]][2]
+        if dFrom0 >= 0.5
+            if vg[k].sInt.x[j] == 0
+                vg[k].sInt.x[j] = 1
+                vg[k].sInt.y[1] = vg[k].sInt.y[1] + c1[j]
+                vg[k].sInt.y[2] = vg[k].sInt.y[2] + c2[j]
+            end
+        else
+            if vg[k].sInt.x[j] == 1
+                vg[k].sInt.x[j] = 0
+                vg[k].sInt.y[1] = vg[k].sInt.y[1] - c1[j]
+                vg[k].sInt.y[2] = vg[k].sInt.y[2] - c2[j]
+            end
+        end
+    end
+
+    @printf("  %2dC : [ %8.2f , %8.2f ] \n", k, vg[k].sInt.y[1], vg[k].sInt.y[2])
+
+    # archive le point obtenu pour les besoins d'affichage
+    if generateurVisualise == -1
+        # archivage pour tous les generateurs
+        push!(d.XPert,vg[k].sInt.y[1])
+        push!(d.YPert,vg[k].sInt.y[2])
+    elseif generateurVisualise == k
+        # archivage seulement pour le generateur k
+        push!(d.XPert,vg[k].sInt.y[1])
+        push!(d.YPert,vg[k].sInt.y[2])
+    end
+#    @show vg[k].sInt.x
+
+    return nothing
+end
+
+#function perturbSolution28b!(vg::Vector{tGenerateur}, k::Int64, c1::Array{Int,1}, c2::Array{Int,1}, d::tListDisplay)
+#
+#end

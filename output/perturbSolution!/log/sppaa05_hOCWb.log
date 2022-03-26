@@ -1,0 +1,17 @@
+0) instance et parametres 
+
+  instance = sppaa05.txt | tailleSampling = 10 | maxTrial = 5 | maxTime = 9223372036854775807
+
+
+1) calcule les etendues de valeurs sur les 2 objectifs
+
+  f1_min=53735.93 ↔ f1_max=69932.69 (Δ=16196.76) 
+  f2_min=33521.47 ↔ f2_max=56925.29 (Δ=23403.82) 
+
+2) calcule les generateurs par e-contrainte alternant minimiser z1 et z2
+
+  z1  1 : ϵ = 56925.29  fRL = 53735.93  [ 53728.89 , 56917.51 ] 
+  z2  1 : ϵ = 69932.69  fRL = 33521.47  [ 69933.27 , 33521.52 ] 
+  z1  2 : ϵ = 54324.87  fRL = 53750.87  [ 53747.03 , 54321.30 ] 
+  z2  2 : ϵ = 68133.05  fRL = 33597.99  [ 68128.93 , 33597.36 ] 
+  z1  3 : ϵ = 51724.44  

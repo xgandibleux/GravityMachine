@@ -49,3 +49,40 @@ function loadNDPoints2SPA(fname::String)
     close(f)
     return xN, yN
 end
+
+# ==============================================================================
+# Collect the un-hidden filenames available in a given folder
+
+function getfname(pathtofolder)
+
+    # recupere tous les fichiers se trouvant dans le repertoire cible
+    allfiles = readdir(pathtofolder)
+
+    # vecteur booleen qui marque les noms de fichiers valides
+    flag = trues(size(allfiles))
+
+    k=1
+    for f in allfiles
+        # traite chaque fichier du repertoire
+        if f[1] == '.'
+            # fichier cache => supprimer
+            flag[k] = false
+        end
+        k = k+1
+    end
+
+    # extrait les noms valides et retourne le vecteur correspondant
+    finstances = allfiles[flag]
+    return finstances
+end
+
+# ==============================================================================
+# Initialise le dictionnaire de type OrderedDict{String, Vector{Any}} passer en
+# paramètre (y ajoute les des clés comme "instance", "#U", etc.)
+
+function initCSVdict!(dict::OrderedDict{String, Vector{Any}})
+    dict["#C"] = []
+    dict["#U"] = []
+    dict["CPUt (s)"] = []
+    dict["r (%)"] = []
+end
